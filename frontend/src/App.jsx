@@ -11,6 +11,7 @@ import CveSecurityModal from './components/CveSecurityModal';
 import PipelineProgressBar from './components/PipelineProgressBar';
 import ActivityTimeline from './components/ActivityTimeline';
 import SandboxManager from './components/SandboxManager';
+import { RemotionVideoModal } from './components/RemotionVideoModal';
 import { ToastProvider, useToast } from './components/ToastNotification';
 import api from './api';
 import { Layers } from 'lucide-react';
@@ -60,6 +61,7 @@ function Dashboard() {
 
   const [isCveModalOpen,       setIsCveModalOpen]       = useState(false);
   const [isSandboxManagerOpen, setIsSandboxManagerOpen] = useState(false);
+  const [isVideoModalOpen,     setIsVideoModalOpen]     = useState(false);
 
   // Activity timeline events
   const [events, setEvents] = useState([]);
@@ -249,6 +251,7 @@ function Dashboard() {
         onReset={handleReset}
         isProcessing={isRunning}
         onOpenSandboxManager={() => setIsSandboxManagerOpen(true)}
+        onOpenVideoDemo={() => setIsVideoModalOpen(true)}
       />
 
       {/* ── Main ─────────────────────────────────────────────────── */}
@@ -376,6 +379,12 @@ function Dashboard() {
           onClose={() => setIsSandboxManagerOpen(false)}
         />
       )}
+
+      {/* Remotion 3-Minute Video Demo Player Modal */}
+      <RemotionVideoModal
+        isOpen={isVideoModalOpen}
+        onClose={() => setIsVideoModalOpen(false)}
+      />
 
       {/* Footer */}
       <footer className="bg-carbon-90 border-t border-carbon-80 py-4 px-6 text-center text-xs text-carbon-50 font-mono">
