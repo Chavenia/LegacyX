@@ -1,7 +1,7 @@
 import React from 'react';
-import { Layers, Terminal, Cpu, RefreshCw, Server } from 'lucide-react';
+import { Layers, Terminal, Cpu, RefreshCw, Server, Video } from 'lucide-react';
 
-export default function Header({ backendConnected, onReset, isProcessing, onOpenSandboxManager }) {
+export default function Header({ backendConnected, onReset, isProcessing, onOpenSandboxManager, onOpenVideoDemo }) {
   return (
     <header className="bg-carbon-90 border-b border-carbon-80 px-6 py-4 sticky top-0 z-50 shadow-carbon">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -53,6 +53,16 @@ export default function Header({ backendConnected, onReset, isProcessing, onOpen
                 : <span className="text-carbon-red-60 font-semibold">Offline</span>}
             </span>
           </div>
+
+          {/* Video Demo modal trigger */}
+          <button
+            onClick={onOpenVideoDemo}
+            title="Watch 3-minute LegacyX Video Demo (Remotion)"
+            className="flex items-center gap-1.5 bg-carbon-blue-60 hover:bg-carbon-blue-70 text-white px-3 py-1.5 transition text-xs font-semibold cursor-pointer shadow-sm"
+          >
+            <Video className="w-3.5 h-3.5" />
+            <span>Video Demo</span>
+          </button>
 
           {/* Sandbox Manager toggle */}
           <button

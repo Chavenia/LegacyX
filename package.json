@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "test": "node test/test-scan.js"
+    "test": "node test/test-scan.js",
+    "remotion:studio": "npm --prefix frontend run remotion:studio",
+    "remotion:render": "npm --prefix frontend run remotion:render",
+    "remotion:still": "npm --prefix frontend run remotion:still"
   },
   "keywords": [
     "legacyx",
@@ -20,12 +23,16 @@
   "author": "LegacyX Team",
   "license": "Apache-2.0",
   "dependencies": {
+    "@remotion/cli": "4.0.529",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "diff": "^7.0.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "glob": "^11.0.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "4.0.529",
     "xml2js": "^0.6.2"
   }
 }
