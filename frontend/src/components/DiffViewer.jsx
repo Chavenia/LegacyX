@@ -1,21 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { 
   FileCode, 
   GitCompare, 
   Copy, 
   Check, 
-  Layers, 
-  Sparkles, 
-  ArrowLeftRight, 
-  Cpu, 
-  CheckCircle2,
-  FileCheck
+  Cpu
 } from 'lucide-react';
 import { DiffEditor } from '@monaco-editor/react';
 
 export default function DiffViewer({ diffs = [] }) {
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
-  const [viewMode, setViewMode] = useState('side-by-side'); // 'side-by-side' | 'monaco'
+  const [viewMode, setViewMode] = useState('side-by-side');
   const [copied, setCopied] = useState(false);
 
   const leftPaneRef = useRef(null);
@@ -54,51 +49,49 @@ export default function DiffViewer({ diffs = [] }) {
 
   if (!diffs || diffs.length === 0) {
     return (
-      <div className="bg-carbon-90 border border-carbon-80 p-8 text-center text-carbon-50 shadow-carbon mb-6">
-        <GitCompare className="w-12 h-12 text-carbon-70 mx-auto mb-3" />
+      <div className="bg-[#121418] border border-[#23262D] rounded-xl p-8 text-center text-neutral-400 mb-6">
+        <GitCompare className="w-10 h-10 text-neutral-600 mx-auto mb-2.5" />
         <h3 className="text-sm font-semibold text-white mb-1">AST Diff Viewer Awaiting Refactoring Run</h3>
-        <p className="text-xs text-carbon-50 max-w-md mx-auto">
-          Click <strong>[Execute Governed Modernization via Bob 2.0]</strong> above to generate side-by-side code diffs comparing legacy Java 8/javax with modern Java 21/Jakarta.
+        <p className="text-xs text-neutral-400 max-w-md mx-auto leading-relaxed">
+          Execute modernization via Bob 2.0 to generate side-by-side code diffs comparing legacy Java 8/javax with modern Java 21/Jakarta.
         </p>
       </div>
     );
   }
 
-  // Helper to split lines for side-by-side rendering
   const originalLines = (currentDiff?.originalCode || '').split(/\r?\n/);
   const modernLines = (currentDiff?.modernCode || '').split(/\r?\n/);
 
-  // Aggregate diff stats across all files
   const totalAdditions = diffs.reduce((sum, d) => sum + (d.metrics?.additions || 0), 0);
   const totalDeletions = diffs.reduce((sum, d) => sum + (d.metrics?.deletions || 0), 0);
   const transforms = [...new Set(diffs.flatMap(d => d.appliedTransforms || []))];
 
   return (
-    <div className="bg-carbon-90 border border-carbon-80 shadow-carbon mb-6">
+    <div className="bg-[#121418] border border-[#23262D] rounded-xl overflow-hidden mb-6">
       
-      {/* ── Diff Stats Summary Banner ───────────────────────────────── */}
-      <div className="bg-carbon-100 border-b border-carbon-80 px-5 py-3 flex flex-wrap items-center gap-4 text-xs font-mono">
-        <span className="text-carbon-50 font-semibold uppercase tracking-wider">Diff Summary</span>
-        <span className="text-carbon-green-50">+{totalAdditions} additions</span>
-        <span className="text-carbon-red-60">−{totalDeletions} deletions</span>
-        <span className="text-carbon-blue-60">{diffs.length} files</span>
+      {/* Diff Stats Summary Banner */}
+      <div className="bg-[#0E1013] border-b border-[#23262D] px-4 py-2.5 flex flex-wrap items-center gap-4 text-xs font-mono">
+        <span className="text-neutral-400 font-semibold uppercase tracking-wider">Diff Summary</span>
+        <span className="text-emerald-400 font-medium">+{totalAdditions} additions</span>
+        <span className="text-red-400 font-medium">−{totalDeletions} deletions</span>
+        <span className="text-blue-400 font-medium">{diffs.length} files</span>
         <div className="flex flex-wrap gap-1 ml-auto">
           {transforms.map((t, i) => (
-            <span key={i} className="bg-carbon-80 text-carbon-teal-50 border border-carbon-70 px-2 py-0.5 text-[10px]">
+            <span key={i} className="bg-[#16181E] text-cyan-300 border border-[#262830] rounded px-2 py-0.5 text-[10px]">
               {t}
             </span>
           ))}
         </div>
       </div>
 
-      {/* ── Diff Viewer Top Bar ─────────────────────────────────────── */}
-      <div className="p-4 border-b border-carbon-80 flex flex-col md:flex-row md:items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <GitCompare className="w-5 h-5 text-carbon-blue-60" />
-          <h2 className="text-base font-bold text-white">
+      {/* Diff Viewer Top Bar */}
+      <div className="p-3.5 border-b border-[#23262D] flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <GitCompare className="w-4 h-4 text-blue-400" />
+          <h2 className="text-sm font-semibold text-white">
             Side-by-Side AST Diff Viewer
           </h2>
-          <span className="text-xs bg-carbon-80 text-carbon-30 px-2 py-0.5 font-mono">
+          <span className="text-xs bg-[#16181E] text-neutral-300 border border-[#262830] px-2 py-0.5 rounded font-mono">
             {diffs.length} Files Refactored
           </span>
         </div>
@@ -107,16 +100,16 @@ export default function DiffViewer({ diffs = [] }) {
         <div className="flex items-center gap-2 text-xs">
           
           {/* View Mode Toggle */}
-          <div className="bg-carbon-100 border border-carbon-80 p-0.5 flex items-center font-mono">
+          <div className="bg-[#0B0C0E] border border-[#23262D] rounded-lg p-0.5 flex items-center font-mono">
             <button
               onClick={() => setViewMode('side-by-side')}
-              className={`px-3 py-1 cursor-pointer transition ${viewMode === 'side-by-side' ? 'bg-carbon-blue-60 text-white font-semibold' : 'text-carbon-50 hover:text-white'}`}
+              className={`px-2.5 py-1 rounded text-xs cursor-pointer transition-colors ${viewMode === 'side-by-side' ? 'bg-blue-600 text-white font-medium' : 'text-neutral-400 hover:text-white'}`}
             >
               Side-by-Side
             </button>
             <button
               onClick={() => setViewMode('monaco')}
-              className={`px-3 py-1 cursor-pointer transition ${viewMode === 'monaco' ? 'bg-carbon-blue-60 text-white font-semibold' : 'text-carbon-50 hover:text-white'}`}
+              className={`px-2.5 py-1 rounded text-xs cursor-pointer transition-colors ${viewMode === 'monaco' ? 'bg-blue-600 text-white font-medium' : 'text-neutral-400 hover:text-white'}`}
             >
               Monaco Diff
             </button>
@@ -125,34 +118,34 @@ export default function DiffViewer({ diffs = [] }) {
           {/* Copy Button */}
           <button
             onClick={handleCopyModernCode}
-            className="flex items-center gap-1.5 bg-carbon-80 hover:bg-carbon-70 text-carbon-10 px-3 py-1.5 transition text-xs font-mono cursor-pointer border border-carbon-70"
+            className="flex items-center gap-1.5 bg-[#16181E] hover:bg-[#202228] text-white px-3 py-1.5 rounded-lg transition-colors text-xs font-mono cursor-pointer border border-[#262830]"
           >
-            {copied ? <Check className="w-3.5 h-3.5 text-carbon-green-50" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copied ? 'Copied!' : 'Copy Java 21 Code'}</span>
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-neutral-400" />}
+            <span>{copied ? 'Copied!' : 'Copy Code'}</span>
           </button>
         </div>
       </div>
 
       {/* File Selector Tabs */}
-      <div className="flex items-center gap-1 overflow-x-auto bg-carbon-100 border-b border-carbon-80 px-3 pt-2 text-xs font-mono">
+      <div className="flex items-center gap-1 overflow-x-auto bg-[#0E1013] border-b border-[#23262D] px-2 pt-1.5 text-xs font-mono">
         {diffs.map((d, index) => {
           const isActive = index === selectedFileIndex;
           return (
             <button
               key={index}
               onClick={() => setSelectedFileIndex(index)}
-              className={`flex items-center gap-2 px-3 py-2 border-t-2 transition cursor-pointer whitespace-nowrap ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-t border-t-2 transition-colors cursor-pointer whitespace-nowrap text-xs ${
                 isActive 
-                  ? 'bg-carbon-90 border-carbon-blue-60 text-white font-semibold shadow' 
-                  : 'bg-transparent border-transparent text-carbon-50 hover:text-carbon-30 hover:bg-carbon-80/40'
+                  ? 'bg-[#121418] border-blue-500 text-white font-medium' 
+                  : 'bg-transparent border-transparent text-neutral-400 hover:text-white hover:bg-white/5'
               }`}
             >
-              <FileCode className={`w-3.5 h-3.5 ${isActive ? 'text-carbon-blue-60' : 'text-carbon-60'}`} />
+              <FileCode className={`w-3.5 h-3.5 ${isActive ? 'text-blue-400' : 'text-neutral-500'}`} />
               <span>{d.fileName}</span>
-              <span className="text-[10px] px-1 bg-carbon-80 rounded text-carbon-green-50">
+              <span className="text-[10px] px-1 py-0.2 bg-emerald-950/60 border border-emerald-800/50 rounded text-emerald-400">
                 +{d.metrics.additions}
               </span>
-              <span className="text-[10px] px-1 bg-carbon-80 rounded text-carbon-red-60">
+              <span className="text-[10px] px-1 py-0.2 bg-red-950/60 border border-red-800/50 rounded text-red-400">
                 -{d.metrics.deletions}
               </span>
             </button>
@@ -162,21 +155,21 @@ export default function DiffViewer({ diffs = [] }) {
 
       {/* Active File Metadata Header */}
       {currentDiff && (
-        <div className="bg-carbon-100/50 px-4 py-2.5 border-b border-carbon-80 flex flex-wrap items-center justify-between gap-3 text-xs">
+        <div className="bg-[#101216] px-3.5 py-2 border-b border-[#23262D] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-carbon-30">
-              Path: <strong className="text-white">{currentDiff.filePath}</strong>
+            <span className="font-mono text-neutral-400">
+              Path: <strong className="text-white font-normal">{currentDiff.filePath}</strong>
             </span>
-            <span className="bg-carbon-purple-60/20 text-carbon-purple-60 border border-carbon-purple-60/40 px-2 py-0.5 rounded font-mono flex items-center gap-1 text-[11px]">
-              <Cpu className="w-3 h-3" /> {currentDiff.subagent}
+            <span className="bg-purple-950/50 text-purple-300 border border-purple-800/50 px-2 py-0.5 rounded font-mono flex items-center gap-1 text-[11px]">
+              <Cpu className="w-3 h-3 text-purple-400" /> {currentDiff.subagent}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-carbon-50 font-mono text-[11px]">Transforms:</span>
+            <span className="text-neutral-400 font-mono text-[11px]">Transforms:</span>
             <div className="flex flex-wrap gap-1">
               {currentDiff.appliedTransforms?.map((t, i) => (
-                <span key={i} className="bg-carbon-80 text-carbon-teal-50 px-2 py-0.5 text-[10px] font-mono border border-carbon-70">
+                <span key={i} className="bg-[#16181E] text-cyan-300 px-2 py-0.5 text-[10px] font-mono border border-[#262830] rounded">
                   {t}
                 </span>
               ))}
@@ -188,9 +181,8 @@ export default function DiffViewer({ diffs = [] }) {
       {/* Main Diff Area */}
       <div className="relative">
         
-        {/* Monaco Diff Viewer Mode */}
         {viewMode === 'monaco' ? (
-          <div className="h-[550px] w-full bg-carbon-100">
+          <div className="h-[520px] w-full bg-[#0B0C0E]">
             <DiffEditor
               height="100%"
               original={currentDiff?.originalCode || ''}
@@ -208,23 +200,22 @@ export default function DiffViewer({ diffs = [] }) {
             />
           </div>
         ) : (
-          /* High-Performance Side-by-Side AST View */
-          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-carbon-80 bg-carbon-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#23262D] bg-[#0B0C0E]">
             
             {/* Left Column: Legacy Baseline */}
             <div className="flex flex-col">
-              <div className="bg-carbon-red-90/50 border-b border-carbon-80 px-4 py-2 text-xs font-mono font-semibold text-carbon-red-60 flex items-center justify-between sticky top-0 z-10">
+              <div className="bg-red-950/30 border-b border-[#23262D] px-3.5 py-1.5 text-xs font-mono font-medium text-red-300 flex items-center justify-between sticky top-0 z-10">
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-carbon-red-60" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-400" />
                   LEGACY BASELINE (Java 8 / javax.* / JUnit 4)
                 </span>
-                <span className="text-[11px] text-carbon-50">-{currentDiff?.metrics.deletions} lines</span>
+                <span className="text-[11px] text-neutral-400">-{currentDiff?.metrics.deletions} lines</span>
               </div>
               
               <div 
                 ref={leftPaneRef}
                 onScroll={handleLeftScroll}
-                className="h-[520px] overflow-auto font-mono text-xs leading-5 bg-carbon-100 select-text"
+                className="h-[500px] overflow-auto font-mono text-xs leading-5 bg-[#0B0C0E] select-text"
               >
                 {originalLines.map((line, idx) => {
                   const lineNum = idx + 1;
@@ -238,13 +229,18 @@ export default function DiffViewer({ diffs = [] }) {
                   return (
                     <div 
                       key={idx} 
-                      className={`flex items-start ${isDeletedOrChanged ? 'diff-line-delete text-red-200' : 'diff-line-normal text-carbon-30 hover:bg-carbon-90/50'}`}
+                      className={`flex items-start px-2 py-0.5 hover:bg-white/5 ${
+                        isDeletedOrChanged ? 'diff-line-delete text-red-200' : 'text-neutral-400'
+                      }`}
                     >
-                      <span className="w-12 shrink-0 select-none text-right pr-3 text-carbon-60 bg-carbon-90/40 text-[11px] py-0.5">
+                      <span className="w-8 shrink-0 text-right pr-3 select-none text-neutral-600 text-[10px]">
                         {lineNum}
                       </span>
-                      <pre className="px-2 py-0.5 whitespace-pre overflow-x-visible font-mono">
-                        {line || ' '}
+                      <span className="w-4 shrink-0 select-none text-red-400 font-bold">
+                        {isDeletedOrChanged ? '−' : ' '}
+                      </span>
+                      <pre className="font-mono text-xs overflow-visible whitespace-pre">
+                        {line}
                       </pre>
                     </div>
                   );
@@ -252,40 +248,45 @@ export default function DiffViewer({ diffs = [] }) {
               </div>
             </div>
 
-            {/* Right Column: Modernized Target */}
+            {/* Right Column: Modernized Java 21 */}
             <div className="flex flex-col">
-              <div className="bg-carbon-green-90/50 border-b border-carbon-80 px-4 py-2 text-xs font-mono font-semibold text-carbon-green-50 flex items-center justify-between sticky top-0 z-10">
+              <div className="bg-emerald-950/30 border-b border-[#23262D] px-3.5 py-1.5 text-xs font-mono font-medium text-emerald-300 flex items-center justify-between sticky top-0 z-10">
                 <span className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-carbon-green-50" />
-                  MODERNIZED TARGET (Java 21 LTS / jakarta.* / Records / JUnit 5)
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  MODERNIZED (Java 21 LTS / Spring Boot 3.3.4 / Jakarta)
                 </span>
-                <span className="text-[11px] text-carbon-green-50">+{currentDiff?.metrics.additions} lines</span>
+                <span className="text-[11px] text-neutral-400">+{currentDiff?.metrics.additions} lines</span>
               </div>
-              
+
               <div 
                 ref={rightPaneRef}
                 onScroll={handleRightScroll}
-                className="h-[520px] overflow-auto font-mono text-xs leading-5 bg-carbon-100 select-text"
+                className="h-[500px] overflow-auto font-mono text-xs leading-5 bg-[#080B09] select-text"
               >
                 {modernLines.map((line, idx) => {
                   const lineNum = idx + 1;
                   const isAddedOrChanged = line.includes('jakarta.') || 
-                                           line.includes('Integer.valueOf(') || 
-                                           line.includes('<java.version>21</java.version>') || 
-                                           line.includes('public record') || 
-                                           line.includes('org.junit.jupiter') ||
-                                           line.includes('3.3.4');
+                                          line.includes('Integer.valueOf(') || 
+                                          line.includes('<java.version>21') || 
+                                          line.includes('record ') ||
+                                          line.includes('org.junit.jupiter') ||
+                                          line.includes('@BeforeEach');
 
                   return (
                     <div 
                       key={idx} 
-                      className={`flex items-start ${isAddedOrChanged ? 'diff-line-add text-green-200' : 'diff-line-normal text-carbon-10 hover:bg-carbon-90/50'}`}
+                      className={`flex items-start px-2 py-0.5 hover:bg-white/5 ${
+                        isAddedOrChanged ? 'diff-line-add text-emerald-200' : 'text-neutral-300'
+                      }`}
                     >
-                      <span className="w-12 shrink-0 select-none text-right pr-3 text-carbon-60 bg-carbon-90/40 text-[11px] py-0.5">
+                      <span className="w-8 shrink-0 text-right pr-3 select-none text-neutral-600 text-[10px]">
                         {lineNum}
                       </span>
-                      <pre className="px-2 py-0.5 whitespace-pre overflow-x-visible font-mono font-medium">
-                        {line || ' '}
+                      <span className="w-4 shrink-0 select-none text-emerald-400 font-bold">
+                        {isAddedOrChanged ? '+' : ' '}
+                      </span>
+                      <pre className="font-mono text-xs overflow-visible whitespace-pre">
+                        {line}
                       </pre>
                     </div>
                   );
@@ -297,7 +298,6 @@ export default function DiffViewer({ diffs = [] }) {
         )}
 
       </div>
-
     </div>
   );
 }

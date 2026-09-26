@@ -26,9 +26,17 @@ export const api = {
     const res = await apiClient.post('/scan', { repoUrl, branch, token });
     return res.data;
   },
+  scanRepository: async (repoUrl, branch = '', token = '') => {
+    const res = await apiClient.post('/scan', { repoUrl, branch, token });
+    return res.data;
+  },
 
   // Run IBM Bob 2.0 Agent refactoring
   refactor: async (sandboxId) => {
+    const res = await apiClient.post('/refactor', { sandboxId });
+    return res.data;
+  },
+  refactorSandbox: async (sandboxId) => {
     const res = await apiClient.post('/refactor', { sandboxId });
     return res.data;
   },
@@ -44,9 +52,17 @@ export const api = {
     const res = await apiClient.post('/build-test', { sandboxId, maxRetries });
     return res.data;
   },
+  buildAndTestSandbox: async (sandboxId, maxRetries = 3) => {
+    const res = await apiClient.post('/build-test', { sandboxId, maxRetries });
+    return res.data;
+  },
 
   // Deliver branch & prepare watsonx Slack card
   deliver: async (sandboxId, branchName, commitMessage) => {
+    const res = await apiClient.post('/deliver', { sandboxId, branchName, commitMessage });
+    return res.data;
+  },
+  deliverPullRequest: async (sandboxId, branchName, commitMessage) => {
     const res = await apiClient.post('/deliver', { sandboxId, branchName, commitMessage });
     return res.data;
   },
@@ -54,6 +70,12 @@ export const api = {
   // List sandboxes
   listSandboxes: async () => {
     const res = await apiClient.get('/sandboxes');
+    return res.data;
+  },
+
+  // Delete sandbox
+  deleteSandbox: async (sandboxId) => {
+    const res = await apiClient.delete(`/sandboxes/${sandboxId}`);
     return res.data;
   }
 };

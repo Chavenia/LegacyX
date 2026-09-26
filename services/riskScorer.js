@@ -7,7 +7,10 @@ class RiskScorer {
     const breakdown = {
       javaRuntime: { score: 0, max: 30, details: [] },
       namespaceAndFramework: { score: 0, max: 35, details: [] },
+      namespaces: { score: 0, max: 20, details: [] },
+      framework: { score: 0, max: 15, details: [] },
       securityVulnerabilities: { score: 0, max: 20, details: [] },
+      security: { score: 0, max: 20, details: [] },
       testAndArchitecture: { score: 0, max: 15, details: [] }
     };
 
@@ -58,6 +61,14 @@ class RiskScorer {
       breakdown.namespaceAndFramework.details.push('Clean namespace: No legacy javax.* references found.');
     }
     breakdown.namespaceAndFramework.score = Math.min(35, frameworkScore);
+    breakdown.namespaces.score = Math.min(20, Math.ceil(javaxCount * 1.5));
+    breakdown.namespaces.details = javaxCount > 0 
+      ? [`${javaxCount} legacy javax.* namespace references found across ${javaxFiles} files.`]
+      : ['Clean namespace: No legacy javax.* references found.'];
+    breakdown.framework.score = isSpringBoot ? (sbMajor < 3 ? 15 : 0) : 10;
+    breakdown.framework.details = isSpringBoot 
+      ? (sbMajor < 3 ? [`Spring Boot ${pomData?.springBoot?.version || '2.x'} requires upgrade to Spring Boot 3.3.4.`] : ['Spring Boot 3+ detected.'])
+      : ['Non-Spring Boot enterprise stack requires dependency alignment.'];
 
     // 3. Security Vulnerabilities (max 20 pts)
     const criticalCves = securityData?.critical || 0;
@@ -67,11 +78,16 @@ class RiskScorer {
     let secScore = (criticalCves * 10) + (highCves * 4) + (totalCves > 0 ? 2 : 0);
     secScore = Math.min(20, secScore);
     breakdown.securityVulnerabilities.score = secScore;
+    breakdown.security.score = secScore;
 
     if (totalCves > 0) {
-      breakdown.securityVulnerabilities.details.push(`${totalCves} security CVEs identified (${criticalCves} Critical, ${highCves} High).`);
+      const secMsg = `${totalCves} security CVEs identified (${criticalCves} Critical, ${highCves} High).`;
+      breakdown.securityVulnerabilities.details.push(secMsg);
+      breakdown.security.details.push(secMsg);
     } else {
-      breakdown.securityVulnerabilities.details.push('No known critical or high CVEs identified in analyzed dependencies.');
+      const cleanMsg = 'No known critical or high CVEs identified in analyzed dependencies.';
+      breakdown.securityVulnerabilities.details.push(cleanMsg);
+      breakdown.security.details.push(cleanMsg);
     }
 
     // 4. Test Framework & Architecture Debt (max 15 pts)

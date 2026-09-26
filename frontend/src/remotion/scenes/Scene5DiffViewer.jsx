@@ -1,5 +1,5 @@
 import React from 'react';
-import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
+import { spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { VideoBackground } from '../components/VideoBackground';
 import { HeaderBar } from '../components/HeaderBar';
 
@@ -18,13 +18,13 @@ export const Scene5DiffViewer = () => {
 
   return (
     <div style={{ position: 'relative', width: 1920, height: 1080, overflow: 'hidden' }}>
-      <VideoBackground glowColor="#0f62fe" />
-      <HeaderBar sceneNumber={5} sceneTitle="Side-by-Side Monaco AST Code Diff Viewer" />
+      <VideoBackground />
+      <HeaderBar sceneNumber={5} sceneTitle="Side-by-Side Monaco AST Code Diff Viewer" startFrame={3450} />
 
       <div
         style={{
           position: 'absolute',
-          top: 90,
+          top: 70,
           left: 0,
           right: 0,
           bottom: 0,
@@ -34,17 +34,16 @@ export const Scene5DiffViewer = () => {
           padding: '0 80px',
         }}
       >
-        {/* Diff Viewer Window Card */}
+        {/* Diff Viewer Window */}
         <div
           style={{
             width: '100%',
-            maxWidth: 1540,
-            height: 640,
-            backgroundColor: '#161616',
-            border: '1px solid #393939',
+            maxWidth: 1500,
+            height: 650,
+            backgroundColor: '#121418',
+            border: '1px solid #23262D',
             borderRadius: 12,
             overflow: 'hidden',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
             display: 'flex',
             flexDirection: 'column',
             transform: `scale(${Math.max(0, containerSpring)})`,
@@ -54,32 +53,33 @@ export const Scene5DiffViewer = () => {
           {/* Header Bar with Tabs */}
           <div
             style={{
-              backgroundColor: '#1e1e1e',
-              borderBottom: '1px solid #393939',
+              backgroundColor: '#0E1013',
+              borderBottom: '1px solid #23262D',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0 16px',
+              padding: '0 20px',
               height: 48,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
-                  padding: '8px 18px',
-                  backgroundColor: activeTab === 0 ? '#161616' : 'transparent',
-                  borderTop: activeTab === 0 ? '2px solid #0f62fe' : '2px solid transparent',
-                  color: activeTab === 0 ? '#ffffff' : '#8d8d8d',
-                  fontSize: 13,
+                  padding: '5px 14px',
+                  backgroundColor: activeTab === 0 ? '#16181E' : 'transparent',
+                  borderRadius: 6,
+                  border: activeTab === 0 ? '1px solid #262830' : '1px solid transparent',
+                  color: activeTab === 0 ? '#ffffff' : '#6B7280',
+                  fontSize: 12,
                   fontWeight: 600,
                   fontFamily: '"IBM Plex Mono", monospace',
                 }}
               >
-                <span>📄 AccountDto.java</span>
-                <span style={{ fontSize: 10, backgroundColor: 'rgba(36, 161, 72, 0.2)', color: '#42be65', padding: '1px 6px', borderRadius: 4 }}>
+                <span>AccountDto.java</span>
+                <span style={{ fontSize: 10, backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>
                   DTO ➔ Record
                 </span>
               </div>
@@ -89,25 +89,26 @@ export const Scene5DiffViewer = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: 8,
-                  padding: '8px 18px',
-                  backgroundColor: activeTab === 1 ? '#161616' : 'transparent',
-                  borderTop: activeTab === 1 ? '2px solid #8a3ffc' : '2px solid transparent',
-                  color: activeTab === 1 ? '#ffffff' : '#8d8d8d',
-                  fontSize: 13,
+                  padding: '5px 14px',
+                  backgroundColor: activeTab === 1 ? '#16181E' : 'transparent',
+                  borderRadius: 6,
+                  border: activeTab === 1 ? '1px solid #262830' : '1px solid transparent',
+                  color: activeTab === 1 ? '#ffffff' : '#6B7280',
+                  fontSize: 12,
                   fontWeight: 600,
                   fontFamily: '"IBM Plex Mono", monospace',
                 }}
               >
-                <span>⚙️ pom.xml</span>
-                <span style={{ fontSize: 10, backgroundColor: 'rgba(15, 98, 254, 0.2)', color: '#78a9ff', padding: '1px 6px', borderRadius: 4 }}>
+                <span>pom.xml</span>
+                <span style={{ fontSize: 10, backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', padding: '1px 6px', borderRadius: 4, fontWeight: 600 }}>
                   Java 21 + Spring Boot 3
                 </span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, fontFamily: '"IBM Plex Mono", monospace' }}>
-              <span style={{ color: '#da1e28' }}>● Red: Legacy (Java 8 / Spring Boot 2)</span>
-              <span style={{ color: '#24a148' }}>● Green: Modern (Java 21 LTS / Spring Boot 3)</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, fontSize: 11, fontFamily: '"IBM Plex Mono", monospace' }}>
+              <span style={{ color: '#f87171' }}>● Red: Legacy (Java 8 / Spring Boot 2)</span>
+              <span style={{ color: '#34d399' }}>● Green: Modern (Java 21 LTS / Spring Boot 3)</span>
             </div>
           </div>
 
@@ -116,80 +117,80 @@ export const Scene5DiffViewer = () => {
             {/* Left: Legacy Code */}
             <div
               style={{
-                backgroundColor: '#12151b',
-                borderRight: '1px solid #393939',
+                backgroundColor: '#0B0C0E',
+                borderRight: '1px solid #23262D',
                 display: 'flex',
                 flexDirection: 'column',
                 fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: 13,
+                fontSize: 12,
                 lineHeight: 1.6,
               }}
             >
               <div
                 style={{
-                  padding: '8px 16px',
-                  backgroundColor: 'rgba(218, 30, 40, 0.1)',
-                  borderBottom: '1px solid rgba(218, 30, 40, 0.3)',
+                  padding: '6px 18px',
+                  backgroundColor: 'rgba(239, 68, 68, 0.08)',
+                  borderBottom: '1px solid #23262D',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: '#ff8389',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#f87171',
                 }}
               >
                 <span>ORIGINAL (LEGACY JAVA 8)</span>
                 <span>48 Lines of Mutable Boilerplate</span>
               </div>
 
-              <div style={{ padding: '16px', overflowY: 'hidden', color: '#c6c6c6' }}>
+              <div style={{ padding: '16px 18px', overflowY: 'hidden', color: '#9CA3AF' }}>
                 {activeTab === 0 ? (
                   <>
-                    <div style={{ color: '#6f6f6f' }}>// Legacy Mutable POJO with boilerplate</div>
+                    <div style={{ color: '#4B5563' }}>// Legacy Mutable POJO with boilerplate</div>
                     <div>package com.enterprise.account.dto;</div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ height: 6 }} />
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - import javax.persistence.Entity;
                     </div>
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - import javax.validation.constraints.NotNull;
                     </div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ height: 6 }} />
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - public class AccountDto implements Serializable &#123;
                     </div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;private Long id;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;private String accountNumber;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;private BigDecimal balance;</div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ color: '#6f6f6f' }}>&nbsp;&nbsp;// 30 lines of getters, setters, hashCode, equals...</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;public Long getId() &#123; return id; &#125;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;public void setId(Long id) &#123; this.id = id; &#125;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;public String getAccountNumber() &#123; return accountNumber; &#125;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;public void setAccountNumber(String acc) &#123; this.accountNumber = acc; &#125;</div>
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;private Long id;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;private String accountNumber;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;private BigDecimal balance;</div>
+                    <div style={{ height: 6 }} />
+                    <div style={{ color: '#4B5563' }}>&nbsp;&nbsp;// 30 lines of getters, setters, hashCode, equals...</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;public Long getId() &#123; return id; &#125;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;public void setId(Long id) &#123; this.id = id; &#125;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;public String getAccountNumber() &#123; return accountNumber; &#125;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;public void setAccountNumber(String acc) &#123; this.accountNumber = acc; &#125;</div>
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - &#125;
                     </div>
                   </>
                 ) : (
                   <>
-                    <div style={{ color: '#6f6f6f' }}>&lt;!-- Legacy Maven POM --&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;parent&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div>
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ color: '#4B5563' }}>&lt;!-- Legacy Maven POM --&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&lt;parent&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div>
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - &nbsp;&nbsp;&lt;version&gt;2.1.8.RELEASE&lt;/version&gt;
                     </div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;/parent&gt;</div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ color: '#8d8d8d' }}>&lt;properties&gt;</div>
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ color: '#6B7280' }}>&lt;/parent&gt;</div>
+                    <div style={{ height: 6 }} />
+                    <div style={{ color: '#6B7280' }}>&lt;properties&gt;</div>
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - &nbsp;&nbsp;&lt;java.version&gt;1.8&lt;/java.version&gt;
                     </div>
-                    <div style={{ backgroundColor: 'rgba(218,30,40,0.25)', color: '#ffb3b8' }}>
+                    <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)', color: '#fca5a5' }}>
                       - &nbsp;&nbsp;&lt;log4j2.version&gt;2.14.1&lt;/log4j2.version&gt; &lt;!-- CVE-2021-44228 --&gt;
                     </div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;/properties&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&lt;/properties&gt;</div>
                   </>
                 )}
               </div>
@@ -198,86 +199,86 @@ export const Scene5DiffViewer = () => {
             {/* Right: Modernized Code */}
             <div
               style={{
-                backgroundColor: '#121815',
+                backgroundColor: '#080B09',
                 display: 'flex',
                 flexDirection: 'column',
                 fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: 13,
+                fontSize: 12,
                 lineHeight: 1.6,
               }}
             >
               <div
                 style={{
-                  padding: '8px 16px',
-                  backgroundColor: 'rgba(36, 161, 72, 0.1)',
-                  borderBottom: '1px solid rgba(36, 161, 72, 0.3)',
+                  padding: '6px 18px',
+                  backgroundColor: 'rgba(16, 185, 129, 0.08)',
+                  borderBottom: '1px solid #23262D',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: '#42be65',
+                  fontSize: 11,
+                  fontWeight: 600,
+                  color: '#34d399',
                 }}
               >
                 <span>MODERNIZED (JAVA 21 LTS)</span>
                 <span>Concise Immutable Record • Zero Boilerplate</span>
               </div>
 
-              <div style={{ padding: '16px', overflowY: 'hidden', color: '#c6c6c6' }}>
+              <div style={{ padding: '16px 18px', overflowY: 'hidden', color: '#D1D5DB' }}>
                 {activeTab === 0 ? (
                   <>
-                    <div style={{ color: '#6f6f6f' }}>// Modern Java 21 Record with Jakarta Validation</div>
+                    <div style={{ color: '#4B5563' }}>// Modern Java 21 Record with Jakarta Validation</div>
                     <div>package com.enterprise.account.dto;</div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ height: 6 }} />
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + import jakarta.persistence.Entity;
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + import jakarta.validation.constraints.NotNull;
                     </div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ height: 6 }} />
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + public record AccountDto(
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + &nbsp;&nbsp;Long id,
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + &nbsp;&nbsp;@NotNull String accountNumber,
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + &nbsp;&nbsp;BigDecimal balance
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
-                      + ) &#123;&#125;
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
+                      + ) implements Serializable &#123;&#125;
                     </div>
-                    <div style={{ height: 16 }} />
-                    <div style={{ color: '#42be65', fontSize: 12, fontStyle: 'italic' }}>
-                      ✨ 85% Code Reduction: Built-in immutability, canonical constructor, equals(), and toString().
+                    <div style={{ height: 12 }} />
+                    <div style={{ color: '#34d399', fontWeight: 600 }}>
+                      // ✓ 70% Less Code • Immutable &amp; Thread-Safe by Default
                     </div>
                   </>
                 ) : (
                   <>
-                    <div style={{ color: '#6f6f6f' }}>&lt;!-- Modernized Maven POM --&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;parent&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div>
-                    <div style={{ color: '#8d8d8d' }}>&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ color: '#4B5563' }}>&lt;!-- Modernized Maven POM --&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&lt;parent&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</div>
+                    <div style={{ color: '#6B7280' }}>&nbsp;&nbsp;&lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;</div>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + &nbsp;&nbsp;&lt;version&gt;3.3.4&lt;/version&gt;
                     </div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;/parent&gt;</div>
-                    <div style={{ height: 8 }} />
-                    <div style={{ color: '#8d8d8d' }}>&lt;properties&gt;</div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
+                    <div style={{ color: '#6B7280' }}>&lt;/parent&gt;</div>
+                    <div style={{ height: 6 }} />
+                    <div style={{ color: '#6B7280' }}>&lt;properties&gt;</div>
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
                       + &nbsp;&nbsp;&lt;java.version&gt;21&lt;/java.version&gt;
                     </div>
-                    <div style={{ backgroundColor: 'rgba(36,161,72,0.25)', color: '#a7f0ba' }}>
-                      + &nbsp;&nbsp;&lt;log4j2.version&gt;2.23.1&lt;/log4j2.version&gt; &lt;!-- Safe --&gt;
+                    <div style={{ backgroundColor: 'rgba(16, 185, 129, 0.15)', color: '#a7f3d0' }}>
+                      + &nbsp;&nbsp;&lt;log4j2.version&gt;2.23.1&lt;/log4j2.version&gt; &lt;!-- ZERO CVE --&gt;
                     </div>
-                    <div style={{ color: '#8d8d8d' }}>&lt;/properties&gt;</div>
-                    <div style={{ height: 16 }} />
-                    <div style={{ color: '#42be65', fontSize: 12, fontStyle: 'italic' }}>
-                      🛡️ All Critical CVEs remediated. Modern Jakarta EE dependency trees injected.
+                    <div style={{ color: '#6B7280' }}>&lt;/properties&gt;</div>
+                    <div style={{ height: 12 }} />
+                    <div style={{ color: '#34d399', fontWeight: 600 }}>
+                      &lt;!-- ✓ Spring Boot 3.3.4 + Java 21 LTS Verified --&gt;
                     </div>
                   </>
                 )}

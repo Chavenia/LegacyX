@@ -60,7 +60,15 @@ LegacyX employs a dual-layer architecture:
 ## 🚀 Quickstart
 
 ### 1. Install Dependencies
+
+**Backend:**
 ```bash
+npm install
+```
+
+**Frontend:**
+```bash
+cd frontend
 npm install
 ```
 
@@ -74,6 +82,13 @@ npm test
 ```bash
 npm start
 # Server starts on http://localhost:5000
+```
+
+### 4. Start the Frontend Dev Server
+```bash
+cd frontend
+npm run dev
+# UI starts on http://localhost:3000
 ```
 
 ---

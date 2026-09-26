@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { GitBranch, Key, Search, ArrowRight, Sparkles, FolderGit2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { GitBranch, Key, Search, FolderGit2, AlertCircle } from 'lucide-react';
 
 export default function RepoInput({ onScan, isScanning, scanStep }) {
   const [repoUrl, setRepoUrl] = useState('sample:demo');
-  const [branch, setBranch] = useState('main');
+  const [branch, setBranch] = useState('');
   const [token, setToken] = useState('');
   const [showTokenField, setShowTokenField] = useState(false);
   const [error, setError] = useState(null);
@@ -20,39 +20,38 @@ export default function RepoInput({ onScan, isScanning, scanStep }) {
 
   const handlePresetSelect = (presetUrl) => {
     setRepoUrl(presetUrl);
+    setBranch('');
     setError(null);
   };
 
   return (
-    <div className="bg-carbon-90 border border-carbon-80 p-6 shadow-carbon mb-6">
-      
+    <div className="rounded-xl bg-[#121418] border border-[#23262D] p-5 mb-6">
       {/* Title & Instructions */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-carbon-80 mb-5 gap-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-between pb-4 border-b border-[#202227] mb-4 gap-3">
         <div>
-          <h2 className="text-base font-semibold text-white flex items-center gap-2">
-            <FolderGit2 className="w-5 h-5 text-carbon-blue-60" />
-            Target Repository Ingestion & Pre-Flight Risk Scanner
+          <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+            <FolderGit2 className="w-4 h-4 text-blue-400" />
+            Target Repository Ingestion &amp; Pre-Flight Risk Scanner
           </h2>
-          <p className="text-xs text-carbon-50 mt-1">
-            Input ANY public or private Git repository to allocate an isolated sandbox and parse Java ASTs.
+          <p className="text-xs text-neutral-400 mt-0.5">
+            Input any public or private Git repository to allocate an isolated sandbox and parse Java ASTs.
           </p>
         </div>
         
         {/* Quick Presets */}
         <div className="flex items-center gap-2">
-          <span className="text-xs text-carbon-50 font-mono hidden sm:inline">Presets:</span>
+          <span className="text-xs text-neutral-500 font-mono hidden sm:inline">Presets:</span>
           <button
             type="button"
             onClick={() => handlePresetSelect('sample:demo')}
-            className="text-xs bg-carbon-80 hover:bg-carbon-70 text-carbon-teal-50 px-2.5 py-1 transition font-mono border border-carbon-70 flex items-center gap-1 cursor-pointer"
+            className="text-xs bg-[#181A1F] hover:bg-[#20232B] text-blue-400 px-2.5 py-1 rounded transition-colors font-mono border border-[#282B33] cursor-pointer"
           >
-            <Sparkles className="w-3 h-3 text-carbon-teal-50" />
-            <span>Sample Spring Boot 2 App</span>
+            Sample Spring Boot 2 App
           </button>
           <button
             type="button"
             onClick={() => handlePresetSelect('https://github.com/gabrielrovesti/spring-boot-migration-guide')}
-            className="text-xs bg-carbon-80 hover:bg-carbon-70 text-carbon-30 px-2.5 py-1 transition font-mono border border-carbon-70 cursor-pointer"
+            className="text-xs bg-[#181A1F] hover:bg-[#20232B] text-neutral-400 hover:text-white px-2.5 py-1 rounded transition-colors font-mono border border-[#282B33] cursor-pointer"
           >
             spring-boot-migration-guide
           </button>
@@ -60,11 +59,11 @@ export default function RepoInput({ onScan, isScanning, scanStep }) {
       </div>
 
       {/* Ingestion Form */}
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         
         {/* Primary Repo URL Input */}
         <div>
-          <label className="block text-xs font-mono text-carbon-30 uppercase tracking-wider mb-1.5">
+          <label className="block text-xs font-mono text-neutral-400 uppercase tracking-wider mb-1.5">
             Git Repository URL (HTTPS / SSH / Sample)
           </label>
           <div className="relative flex items-center">
@@ -74,22 +73,22 @@ export default function RepoInput({ onScan, isScanning, scanStep }) {
               onChange={(e) => setRepoUrl(e.target.value)}
               placeholder="e.g. https://github.com/org/repo.git or sample:demo"
               disabled={isScanning}
-              className="w-full bg-carbon-100 border border-carbon-70 focus:border-carbon-blue-60 text-white px-4 py-3 text-sm font-mono placeholder:text-carbon-60 outline-none transition disabled:opacity-50"
+              className="w-full bg-[#0B0C0E] border border-[#262830] focus:border-blue-500 rounded-lg text-white px-3.5 py-2.5 text-sm font-mono placeholder:text-neutral-600 outline-none transition-colors disabled:opacity-50"
             />
             <button
               type="submit"
               disabled={isScanning}
-              className="absolute right-1.5 top-1.5 bottom-1.5 bg-carbon-blue-60 hover:bg-carbon-blue-70 text-white px-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider transition disabled:opacity-50 cursor-pointer"
+              className="absolute right-1.5 top-1.5 bottom-1.5 bg-blue-600 hover:bg-blue-500 text-white px-4 rounded-md flex items-center gap-2 text-xs font-medium uppercase tracking-wider transition-colors disabled:opacity-50 cursor-pointer"
             >
               {isScanning ? (
                 <>
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   <span>Scanning...</span>
                 </>
               ) : (
                 <>
-                  <Search className="w-4 h-4" />
-                  <span>Scan Pre-Flight Risk</span>
+                  <Search className="w-3.5 h-3.5" />
+                  <span>Scan Pre-Flight</span>
                 </>
               )}
             </button>
@@ -97,80 +96,63 @@ export default function RepoInput({ onScan, isScanning, scanStep }) {
         </div>
 
         {/* Advanced Options Bar (Branch & PAT Token) */}
-        <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
+        <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-0.5">
           <div className="flex items-center gap-4">
-            
-            {/* Branch */}
-            <div className="flex items-center gap-1.5 text-carbon-30">
-              <GitBranch className="w-3.5 h-3.5 text-carbon-50" />
-              <span>Branch:</span>
+            <div className="flex items-center gap-1.5">
+              <GitBranch className="w-3.5 h-3.5 text-neutral-500" />
+              <span className="text-neutral-400">Branch:</span>
               <input
                 type="text"
                 value={branch}
                 onChange={(e) => setBranch(e.target.value)}
                 disabled={isScanning}
-                className="bg-carbon-100 border border-carbon-80 text-white px-2 py-1 text-xs font-mono w-24 focus:border-carbon-blue-60 outline-none"
+                placeholder="default"
+                className="bg-[#0B0C0E] border border-[#262830] focus:border-blue-500 rounded px-2 py-0.5 text-white font-mono text-xs w-28 outline-none"
               />
             </div>
 
-            {/* Token Toggle */}
             <button
               type="button"
               onClick={() => setShowTokenField(!showTokenField)}
-              className="text-xs text-carbon-30 hover:text-white flex items-center gap-1 cursor-pointer underline decoration-dotted"
+              className="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 font-mono cursor-pointer"
             >
               <Key className="w-3 h-3" />
-              <span>{showTokenField ? 'Hide Auth Token' : 'Add Private Repo Token (PAT)'}</span>
+              <span>{showTokenField ? 'Hide Auth Token' : '+ Add Private Git Token'}</span>
             </button>
-
           </div>
 
-          <div className="text-xs text-carbon-50 font-mono">
-            Isolated Sandbox: <span className="text-carbon-teal-50">/tmp/legacyx-sandbox</span>
-          </div>
+          {isScanning && scanStep && (
+            <div className="flex items-center gap-2 text-xs text-blue-400 font-mono bg-[#16181E] px-2.5 py-1 rounded border border-[#262830]">
+              <div className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+              <span>{scanStep}</span>
+            </div>
+          )}
         </div>
 
         {/* Optional Private PAT Input */}
         {showTokenField && (
-          <div className="bg-carbon-100 p-3 border border-carbon-80 text-xs">
-            <label className="block text-xs font-mono text-carbon-30 mb-1">
-              Personal Access Token (for private enterprise repositories)
+          <div className="pt-2 border-t border-[#202227]">
+            <label className="block text-xs font-mono text-neutral-500 mb-1">
+              GitHub / GitLab Personal Access Token (PAT) — Stored only in ephemeral sandbox memory
             </label>
             <input
               type="password"
               value={token}
               onChange={(e) => setToken(e.target.value)}
-              placeholder="ghp_... or OAuth bearer token"
+              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx or glpat-xxxxxxxxxxxxxxxxxxxx"
               disabled={isScanning}
-              className="w-full bg-carbon-90 border border-carbon-70 text-white px-3 py-2 text-xs font-mono outline-none focus:border-carbon-blue-60"
+              className="w-full bg-[#0B0C0E] border border-[#262830] focus:border-blue-500 rounded-lg text-white px-3 py-2 text-xs font-mono placeholder:text-neutral-600 outline-none"
             />
-            <p className="text-[11px] text-carbon-50 mt-1">
-              Tokens are injected into isolated git execution in memory and never persisted to logs.
-            </p>
           </div>
         )}
 
-        {/* Error message */}
+        {/* Validation Error Banner */}
         {error && (
-          <div className="bg-carbon-red-90/40 border-l-4 border-carbon-red-60 text-carbon-10 px-4 py-2 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-carbon-red-60 shrink-0" />
+          <div className="flex items-center gap-2 bg-red-950/30 border border-red-800/60 text-red-300 px-3 py-2 rounded-lg text-xs font-mono">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
-
-        {/* Animated Scan Progress */}
-        {isScanning && (
-          <div className="bg-carbon-100 border border-carbon-blue-60/40 p-3 text-xs flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-carbon-blue-60 animate-ping" />
-              <span className="font-mono text-carbon-30">
-                {scanStep || 'Allocating sandbox and cloning repository...'}
-              </span>
-            </div>
-            <span className="text-carbon-blue-60 font-mono animate-pulse">Running AST Parsers...</span>
-          </div>
-        )}
-
       </form>
     </div>
   );

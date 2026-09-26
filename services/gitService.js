@@ -61,10 +61,11 @@ class GitService {
     }
 
     const authUrl = this.formatAuthenticatedUrl(repoUrl, token || process.env.GITHUB_TOKEN);
-    const branchFlag = branch ? `--branch ${branch}` : '';
     const depthFlag = depth ? `--depth ${depth}` : '';
+    const cleanBranch = (branch && branch.trim() !== '' && branch !== 'default' && branch !== 'auto') ? branch.trim() : null;
 
-    const cloneCmd = `git clone ${depthFlag} ${branchFlag} "${authUrl}" "${targetDir}"`.trim();
+    let branchFlag = cleanBranch ? `--branch ${cleanBranch}` : '';
+    let cloneCmd = `git clone ${depthFlag} ${branchFlag} "${authUrl}" "${targetDir}"`.trim();
 
     try {
       // Execute git clone
@@ -73,25 +74,44 @@ class GitService {
         timeout: 120000,
         env: { ...process.env, GIT_TERMINAL_PROMPT: '0' }
       });
-
-      let commitHash = 'unknown';
-      try {
-        commitHash = execSync('git rev-parse HEAD', { cwd: targetDir, encoding: 'utf8' }).trim();
-      } catch {
-        // ignore rev-parse error
-      }
-
-      return {
-        cloned: true,
-        commitHash,
-        repoUrl,
-        targetDir
-      };
     } catch (err) {
-      // Sanitize token from error messages
-      const safeMessage = err.message.replace(/https:\/\/[^@]+@/g, 'https://***@');
-      throw new Error(`Git clone failed: ${safeMessage}`);
+      // If a specific branch was attempted and failed (e.g. main vs master), retry with the repository's default branch
+      if (cleanBranch) {
+        console.warn(`[LegacyX Git] Clone with branch '${cleanBranch}' failed. Retrying with remote default branch...`);
+        try { fs.rmSync(targetDir, { recursive: true, force: true }); } catch {}
+        try {
+          const fallbackCmd = `git clone ${depthFlag} "${authUrl}" "${targetDir}"`.trim();
+          execSync(fallbackCmd, {
+            stdio: 'pipe',
+            timeout: 120000,
+            env: { ...process.env, GIT_TERMINAL_PROMPT: '0' }
+          });
+        } catch (fallbackErr) {
+          const safeMessage = (fallbackErr.stderr ? fallbackErr.stderr.toString() : fallbackErr.message).replace(/https:\/\/[^@]+@/g, 'https://***@');
+          throw new Error(`Git clone failed: ${safeMessage}`);
+        }
+      } else {
+        const safeMessage = (err.stderr ? err.stderr.toString() : err.message).replace(/https:\/\/[^@]+@/g, 'https://***@');
+        throw new Error(`Git clone failed: ${safeMessage}`);
+      }
     }
+
+    let commitHash = 'unknown';
+    let resolvedBranch = cleanBranch || 'default';
+    try {
+      commitHash = execSync('git rev-parse HEAD', { cwd: targetDir, encoding: 'utf8' }).trim();
+      resolvedBranch = execSync('git rev-parse --abbrev-ref HEAD', { cwd: targetDir, encoding: 'utf8' }).trim();
+    } catch {
+      // ignore rev-parse error
+    }
+
+    return {
+      cloned: true,
+      commitHash,
+      branch: resolvedBranch,
+      repoUrl,
+      targetDir
+    };
   }
 
   /**

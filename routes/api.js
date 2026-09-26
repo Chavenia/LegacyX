@@ -165,6 +165,7 @@ router.post('/refactor', async (req, res) => {
     return res.json({
       success: true,
       sandboxId,
+      ...refactorResult,
       refactorResult
     });
   } catch (err) {
@@ -220,6 +221,7 @@ router.post('/build-test', async (req, res) => {
     return res.json({
       success: true,
       sandboxId,
+      ...buildResult,
       buildResult
     });
   } catch (err) {

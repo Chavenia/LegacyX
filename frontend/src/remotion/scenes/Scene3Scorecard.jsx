@@ -2,6 +2,7 @@ import React from 'react';
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { VideoBackground } from '../components/VideoBackground';
 import { HeaderBar } from '../components/HeaderBar';
+import { UseLayoutsCard } from '../components/UseLayoutsCard';
 
 export const Scene3Scorecard = () => {
   const frame = useCurrentFrame();
@@ -13,24 +14,24 @@ export const Scene3Scorecard = () => {
 
   // Animated gauge calculation
   const gaugeScore = Math.floor(interpolate(frame, [60, 140], [0, 24], { extrapolateRight: 'clamp' }));
-  const gaugeOffset = interpolate(frame, [60, 140], [440, 440 - (440 * 0.24)], { extrapolateRight: 'clamp' });
+  const gaugeOffset = interpolate(frame, [60, 140], [408, 408 - (408 * 0.24)], { extrapolateRight: 'clamp' });
 
   // Spring animation for metric cards
   const cardsSpring = spring({
-    frame: frame - 80,
+    frame: frame - 75,
     fps,
     config: { damping: 12, stiffness: 80 },
   });
 
   return (
     <div style={{ position: 'relative', width: 1920, height: 1080, overflow: 'hidden' }}>
-      <VideoBackground glowColor="#da1e28" />
-      <HeaderBar sceneNumber={3} sceneTitle="Pre-Flight Scan & Risk Scorecard (0–100)" />
+      <VideoBackground />
+      <HeaderBar sceneNumber={3} sceneTitle="Pre-Flight Scan & Risk Scorecard (0–100)" startFrame={1500} />
 
       <div
         style={{
           position: 'absolute',
-          top: 90,
+          top: 70,
           left: 0,
           right: 0,
           bottom: 0,
@@ -44,43 +45,44 @@ export const Scene3Scorecard = () => {
         <div
           style={{
             width: '100%',
-            maxWidth: 1540,
-            backgroundColor: '#1e1e1e',
-            border: '1px solid #393939',
-            borderRadius: 10,
-            padding: '14px 24px',
+            maxWidth: 1500,
+            backgroundColor: '#121418',
+            border: '1px solid #23262D',
+            borderRadius: 12,
+            padding: '12px 20px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: 24,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.4)',
+            marginBottom: 20,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flex: 1 }}>
             <span
               style={{
                 fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: 12,
-                color: '#78a9ff',
-                backgroundColor: 'rgba(15, 98, 254, 0.15)',
+                fontSize: 11,
+                color: '#9CA3AF',
+                backgroundColor: '#181A1F',
                 padding: '4px 10px',
                 borderRadius: 4,
-                border: '1px solid rgba(15, 98, 254, 0.3)',
+                border: '1px solid #282B33',
+                fontWeight: 600,
+                textTransform: 'uppercase',
               }}
             >
-              REPOSITORY TARGET
+              Repository Target
             </span>
             <span
               style={{
                 fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: 16,
+                fontSize: 14,
                 color: '#ffffff',
-                backgroundColor: '#161616',
-                padding: '8px 16px',
+                backgroundColor: '#0B0C0E',
+                padding: '6px 14px',
                 borderRadius: 6,
-                border: '1px solid #393939',
+                border: '1px solid #23262D',
                 flex: 1,
-                maxWidth: 600,
+                maxWidth: 560,
               }}
             >
               https://github.com/enterprise/account-service.git
@@ -89,10 +91,11 @@ export const Scene3Scorecard = () => {
               style={{
                 fontSize: 12,
                 fontFamily: '"IBM Plex Mono", monospace',
-                color: '#a8a8a8',
-                backgroundColor: '#262626',
-                padding: '6px 12px',
+                color: '#6B7280',
+                backgroundColor: '#0B0C0E',
+                padding: '5px 10px',
                 borderRadius: 4,
+                border: '1px solid #23262D',
               }}
             >
               branch: main
@@ -105,21 +108,21 @@ export const Scene3Scorecard = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: 8,
-                backgroundColor: showResults ? '#198038' : '#0f62fe',
+                backgroundColor: showResults ? '#059669' : '#2563eb',
                 color: '#fff',
-                fontWeight: 700,
-                fontSize: 14,
-                padding: '8px 18px',
+                fontWeight: 600,
+                fontSize: 12,
+                padding: '6px 14px',
                 borderRadius: 6,
+                fontFamily: '"IBM Plex Mono", monospace',
               }}
             >
               <span
                 style={{
-                  width: 8,
-                  height: 8,
+                  width: 6,
+                  height: 6,
                   borderRadius: '50%',
                   backgroundColor: '#fff',
-                  boxShadow: '0 0 8px #fff',
                 }}
               />
               {showResults ? 'SCAN COMPLETE (AST & POM PARSED)' : `SCANNING AST (${Math.floor(scanProgress)}%)`}
@@ -132,221 +135,184 @@ export const Scene3Scorecard = () => {
           <div
             style={{
               display: 'grid',
-              gridTemplateColumns: '400px 1fr',
-              gap: 28,
+              gridTemplateColumns: '380px 1fr',
+              gap: 20,
               width: '100%',
-              maxWidth: 1540,
+              maxWidth: 1500,
               transform: `scale(${Math.max(0, cardsSpring)})`,
               opacity: Math.max(0, Math.min(1, cardsSpring)),
             }}
           >
-            {/* Left: Modernization Index Gauge */}
-            <div
-              style={{
-                backgroundColor: '#1e1e1e',
-                border: '1px solid #393939',
-                borderRadius: 12,
-                padding: '32px 24px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                boxShadow: '0 12px 32px rgba(0,0,0,0.5)',
-                position: 'relative',
-              }}
+            {/* Left: Modernization Index Gauge Card */}
+            <UseLayoutsCard
+              badge="Pre-Flight Modernization Index"
+              badgeColor="#f87171"
+              metric="24/100"
+              metricColor="#ef4444"
+              title="Critical Debt"
+              footerAuthor="AST Pre-Flight Engine"
+              footerRole="Scorecard based on 47 rules"
+              footerAvatar={
+                <div style={{ backgroundColor: '#dc2626', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
+                  24
+                </div>
+              }
             >
-              <span style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', color: '#ff8389', letterSpacing: '0.08em', marginBottom: 16 }}>
-                Pre-Flight Modernization Index
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '8px 0 12px 0' }}>
+                {/* SVG Radial Gauge */}
+                <div style={{ position: 'relative', width: 160, height: 160 }}>
+                  <svg width="160" height="160" style={{ transform: 'rotate(-90deg)' }}>
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="65"
+                      stroke="#23262D"
+                      strokeWidth="10"
+                      fill="transparent"
+                    />
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="65"
+                      stroke="#ef4444"
+                      strokeWidth="10"
+                      fill="transparent"
+                      strokeDasharray="408"
+                      strokeDashoffset={gaugeOffset}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span style={{ fontSize: 40, fontWeight: 800, color: '#ef4444', lineHeight: 1 }}>
+                      {gaugeScore}
+                    </span>
+                    <span style={{ fontSize: 11, color: '#6B7280', fontWeight: 600, marginTop: 2 }}>
+                      / 100
+                    </span>
+                  </div>
+                </div>
 
-              {/* SVG Radial Gauge */}
-              <div style={{ position: 'relative', width: 200, height: 200, margin: '8px 0 20px 0' }}>
-                <svg width="200" height="200" style={{ transform: 'rotate(-90deg)' }}>
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="70"
-                    stroke="#393939"
-                    strokeWidth="14"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="100"
-                    cy="100"
-                    r="70"
-                    stroke="#da1e28"
-                    strokeWidth="14"
-                    fill="transparent"
-                    strokeDasharray="440"
-                    strokeDashoffset={gaugeOffset}
-                    strokeLinecap="round"
-                  />
-                </svg>
                 <div
                   style={{
-                    position: 'absolute',
-                    inset: 0,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
+                    backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                    color: '#f87171',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    padding: '3px 10px',
+                    borderRadius: 4,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    marginTop: 8,
+                    fontFamily: '"IBM Plex Mono", monospace',
                   }}
                 >
-                  <span style={{ fontSize: 52, fontWeight: 900, color: '#da1e28', lineHeight: 1 }}>
-                    {gaugeScore}
-                  </span>
-                  <span style={{ fontSize: 14, color: '#8d8d8d', fontWeight: 600, marginTop: 4 }}>
-                    / 100
-                  </span>
+                  HIGH RISK RUNTIME
                 </div>
               </div>
-
-              <div
-                style={{
-                  display: 'inline-block',
-                  backgroundColor: 'rgba(218, 30, 40, 0.2)',
-                  color: '#ff8389',
-                  border: '1px solid #da1e28',
-                  padding: '4px 14px',
-                  borderRadius: 20,
-                  fontSize: 12,
-                  fontWeight: 800,
-                  textTransform: 'uppercase',
-                  marginBottom: 12,
-                }}
-              >
-                CRITICAL REFACTORING REQUIRED
-              </div>
-
-              <p style={{ fontSize: 13, color: '#8d8d8d', margin: 0, lineHeight: 1.5 }}>
-                Legacy Java 8 constructs, deprecated Spring Boot 2 APIs, and unpatched critical CVEs detected.
-              </p>
-            </div>
+            </UseLayoutsCard>
 
             {/* Right: Detected vs Target Runtime & CVE Analysis */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {/* Runtime Comparison Box */}
-              <div
-                style={{
-                  backgroundColor: '#1e1e1e',
-                  border: '1px solid #393939',
-                  borderRadius: 12,
-                  padding: '24px 28px',
-                  display: 'grid',
-                  gridTemplateColumns: '1fr auto 1fr',
-                  gap: 20,
-                  alignItems: 'center',
-                }}
+              <UseLayoutsCard
+                badge="Runtime Environment Shift"
+                badgeColor="#60a5fa"
+                title="Current State vs LegacyX Target"
+                hideDivider={true}
               >
-                <div>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#ff8389', textTransform: 'uppercase' }}>
-                    Current Detected Stack
-                  </span>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: '#f4f4f4', marginTop: 4 }}>
-                    Java 1.8 (Java 8 LTS)
-                  </div>
-                  <div style={{ fontSize: 14, color: '#8d8d8d', marginTop: 4, fontFamily: '"IBM Plex Mono", monospace' }}>
-                    Spring Boot 2.1.8.RELEASE • javax.*
-                  </div>
-                </div>
-
                 <div
                   style={{
-                    backgroundColor: '#262626',
-                    padding: '8px 16px',
-                    borderRadius: 20,
-                    border: '1px solid #525252',
-                    fontSize: 14,
-                    fontWeight: 800,
-                    color: '#00d2ff',
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    gap: 16,
+                    alignItems: 'center',
+                    marginTop: 6,
                   }}
                 >
-                  ➔ UPGRADE TARGET
-                </div>
-
-                <div>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: '#42be65', textTransform: 'uppercase' }}>
-                    Modernization Target
-                  </span>
-                  <div style={{ fontSize: 22, fontWeight: 800, color: '#42be65', marginTop: 4 }}>
-                    Java 21 LTS
+                  {/* Current Legacy */}
+                  <div
+                    style={{
+                      backgroundColor: '#0B0C0E',
+                      border: '1px solid rgba(239, 68, 68, 0.4)',
+                      borderRadius: 8,
+                      padding: '14px 18px',
+                    }}
+                  >
+                    <div style={{ fontSize: 10, color: '#f87171', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4, fontFamily: '"IBM Plex Mono", monospace' }}>
+                      CURRENT MONOLITH
+                    </div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: '#ffffff' }}>Java 8 / Java 11</div>
+                    <div style={{ fontSize: 13, color: '#9CA3AF', marginTop: 2 }}>Spring Boot 2.7.18 • javax.*</div>
+                    <div style={{ fontSize: 11, color: '#f87171', marginTop: 6, fontFamily: '"IBM Plex Mono", monospace' }}>4 End-of-Life Dependencies</div>
                   </div>
-                  <div style={{ fontSize: 14, color: '#8d8d8d', marginTop: 4, fontFamily: '"IBM Plex Mono", monospace' }}>
-                    Spring Boot 3.3.4 • jakarta.* • Records
+
+                  <div style={{ fontSize: 20, color: '#a855f7', fontWeight: 700 }}>➔</div>
+
+                  {/* Modernized Target */}
+                  <div
+                    style={{
+                      backgroundColor: '#0B0C0E',
+                      border: '1px solid rgba(16, 185, 129, 0.4)',
+                      borderRadius: 8,
+                      padding: '14px 18px',
+                    }}
+                  >
+                    <div style={{ fontSize: 10, color: '#34d399', fontWeight: 700, textTransform: 'uppercase', marginBottom: 4, fontFamily: '"IBM Plex Mono", monospace' }}>
+                      LEGACYX TARGET
+                    </div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: '#ffffff' }}>Java 21 LTS</div>
+                    <div style={{ fontSize: 13, color: '#9CA3AF', marginTop: 2 }}>Spring Boot 3.3.4 • jakarta.*</div>
+                    <div style={{ fontSize: 11, color: '#34d399', marginTop: 6, fontFamily: '"IBM Plex Mono", monospace' }}>Virtual Threads + Native Image</div>
                   </div>
                 </div>
-              </div>
+              </UseLayoutsCard>
 
-              {/* Critical CVEs Flagged & Effort Breakdown */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-                {/* CVE Card */}
-                <div
-                  style={{
-                    backgroundColor: '#1e1e1e',
-                    border: '1px solid #393939',
-                    borderRadius: 12,
-                    padding: '20px 24px',
-                  }}
+              {/* 3 Metrics Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+                <UseLayoutsCard
+                  badge="CVE Exposure"
+                  badgeColor="#f87171"
+                  metric="4 Critical"
+                  metricColor="#ef4444"
+                  hideDivider={true}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#ff8389', textTransform: 'uppercase' }}>
-                      Security Vulnerabilities
-                    </span>
-                    <span style={{ backgroundColor: '#da1e28', color: '#fff', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 4 }}>
-                      2 CRITICAL
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                    <div style={{ backgroundColor: '#262626', padding: '10px 14px', borderRadius: 6, borderLeft: '3px solid #da1e28' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 700, color: '#f4f4f4' }}>
-                        <span>CVE-2021-44228 (Log4Shell)</span>
-                        <span style={{ color: '#ff8389' }}>CVSS 10.0</span>
-                      </div>
-                      <div style={{ fontSize: 12, color: '#8d8d8d' }}>log4j-core 2.14.1 Remote Code Execution</div>
-                    </div>
-                    <div style={{ backgroundColor: '#262626', padding: '10px 14px', borderRadius: 6, borderLeft: '3px solid #ff832b' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, fontWeight: 700, color: '#f4f4f4' }}>
-                        <span>CVE-2022-22965 (Spring4Shell)</span>
-                        <span style={{ color: '#ffb784' }}>CVSS 9.8</span>
-                      </div>
-                      <div style={{ fontSize: 12, color: '#8d8d8d' }}>spring-beans RCE via DataBinder parameter binding</div>
-                    </div>
-                  </div>
-                </div>
+                  <p style={{ fontSize: 12, color: '#9CA3AF', margin: '4px 0 0 0' }}>
+                    CVSS 10.0 Log4Shell &amp; Spring4Shell identified in pom.xml dependencies.
+                  </p>
+                </UseLayoutsCard>
 
-                {/* Effort Savings Card */}
-                <div
-                  style={{
-                    backgroundColor: '#1e1e1e',
-                    border: '1px solid #393939',
-                    borderRadius: 12,
-                    padding: '20px 24px',
-                  }}
+                <UseLayoutsCard
+                  badge="Estimated Effort"
+                  badgeColor="#fb923c"
+                  metric="320 hrs"
+                  metricColor="#f97316"
+                  hideDivider={true}
                 >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#78a9ff', textTransform: 'uppercase' }}>
-                      ROI &amp; Dev Savings
-                    </span>
-                    <span style={{ backgroundColor: '#0f62fe', color: '#fff', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 4 }}>
-                      97.5% SAVINGS
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 13, color: '#c6c6c6' }}>Estimated Manual Migration:</span>
-                      <strong style={{ fontSize: 16, color: '#ff8389' }}>168 Dev Hours ($25,200)</strong>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: 13, color: '#c6c6c6' }}>LegacyX Automated Execution:</span>
-                      <strong style={{ fontSize: 16, color: '#42be65' }}>4.2 Minutes ($42)</strong>
-                    </div>
-                    <div style={{ height: 1, backgroundColor: '#393939' }} />
-                    <div style={{ fontSize: 12, color: '#a8a8a8', lineHeight: 1.4 }}>
-                      ⚡ Refactoring roadmap: 14 mutable DTOs, 38 package imports, 4 Maven parents, and 12 JUnit tests.
-                    </div>
-                  </div>
-                </div>
+                  <p style={{ fontSize: 12, color: '#9CA3AF', margin: '4px 0 0 0' }}>
+                    Calculated developer hours for manual migration across 142 source files.
+                  </p>
+                </UseLayoutsCard>
+
+                <UseLayoutsCard
+                  badge="AST Recipe"
+                  badgeColor="#38bdf8"
+                  metric="OpenRewrite"
+                  metricColor="#38bdf8"
+                  hideDivider={true}
+                >
+                  <p style={{ fontSize: 12, color: '#9CA3AF', margin: '4px 0 0 0' }}>
+                    org.openrewrite.java.spring.boot3 ready for Bob 2.0 multi-agent execution.
+                  </p>
+                </UseLayoutsCard>
               </div>
             </div>
           </div>
