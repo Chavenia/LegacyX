@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background-color: #161616;
+  color: #f4f4f4;
+  font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Carbon custom scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #161616;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #393939;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #525252;
+}
+
+/* Diff viewer line styling */
+.diff-line-delete {
+  background-color: rgba(218, 30, 40, 0.18);
+  border-left: 3px solid #da1e28;
+}
+
+.diff-line-add {
+  background-color: rgba(36, 161, 72, 0.18);
+  border-left: 3px solid #24a148;
+}
+
+.diff-line-normal {
+  background-color: transparent;
+  border-left: 3px solid transparent;
+}
+
+/* Pulsing beacon */
+@keyframes beacon {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.animate-beacon {
+  animation: beacon 2s infinite ease-in-out;
+}
+
+/* Toast slide-in from right */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(1.5rem); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Radial gauge ring animation */
+@keyframes gaugeGrow {
+  from { stroke-dashoffset: 314; }
+}
