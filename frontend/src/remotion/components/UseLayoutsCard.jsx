@@ -1,53 +1,110 @@
 import React from 'react';
 
 /**
- * Flat clean card component used across Remotion video scenes.
+ * Card component used across Remotion video scenes.
  */
 export const UseLayoutsCard = ({
   children,
-  className = '',
   style = {},
-  tag = null,
-  glow = false,
   badge = null,
-  showAuthor = false,
+  badgeColor = '#9CA3AF',
+  metric = null,
+  metricColor = '#ffffff',
   title = null,
+  hideDivider = false,
+  footerAuthor = null,
+  footerRole = null,
+  footerAvatar = null,
+  footerRight = null,
 }) => {
   return (
     <div
-      className={`relative flex flex-col justify-between rounded-xl bg-[#121418] border border-[#23262D] p-6 text-neutral-200 ${className}`}
       style={{
-        boxShadow: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#ffffff',
+        border: '1px solid #e5e7eb',
+        borderRadius: 12,
+        padding: 20,
+        fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         ...style,
       }}
     >
-      {/* Header if tag or badge */}
-      {(tag || badge) && (
-        <div className="flex items-center justify-between mb-3 w-full">
-          {tag && (
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-400 font-mono">
-              {tag}
+      {/* Badge + Metric row */}
+      {(badge || metric) && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+          {badge && (
+            <span style={{
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.06em',
+              color: badgeColor,
+              fontFamily: '"IBM Plex Mono", monospace',
+            }}>
+              {badge}
             </span>
           )}
-          {badge && (
-            <span className="text-xs font-mono font-medium text-neutral-400 bg-[#16181E] border border-[#23262D] px-2 py-0.5 rounded">
-              {badge}
+          {metric && (
+            <span style={{
+              fontSize: 16,
+              fontWeight: 700,
+              color: metricColor,
+              fontFamily: '"IBM Plex Mono", monospace',
+            }}>
+              {metric}
             </span>
           )}
         </div>
       )}
 
-      {/* Title if provided */}
+      {/* Title */}
       {title && (
-        <h3 className="text-sm font-semibold text-white mb-2 font-mono">
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 8 }}>
           {title}
-        </h3>
+        </div>
       )}
 
-      {/* Main Content */}
-      <div className="flex-1 w-full">
+      {/* Main content */}
+      <div style={{ flex: 1 }}>
         {children}
       </div>
+
+      {/* Footer */}
+      {(footerAuthor || footerRight) && (
+        <>
+          {!hideDivider && (
+            <div style={{ height: 1, backgroundColor: '#e5e7eb', margin: '12px 0' }} />
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {footerAvatar && (
+                <div style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 6,
+                  overflow: 'hidden',
+                  flexShrink: 0,
+                  border: '1px solid #e5e7eb',
+                }}>
+                  {footerAvatar}
+                </div>
+              )}
+              <div>
+                {footerAuthor && (
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#374151' }}>{footerAuthor}</div>
+                )}
+                {footerRole && (
+                  <div style={{ fontSize: 10, color: '#9ca3af' }}>{footerRole}</div>
+                )}
+              </div>
+            </div>
+            {footerRight && (
+              <div>{footerRight}</div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

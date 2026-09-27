@@ -1,0 +1,368 @@
+
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LegacyX Presentation Dialog Script</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1f2328;
+    background: #ffffff;
+    padding: 40px 20px 60px;
+  }
+  .page { max-width: 760px; margin: 0 auto; }
+
+  /* Header */
+  .doc-header { margin-bottom: 36px; }
+  .doc-header h1 { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .doc-header .meta { font-size: 13px; color: #57606a; display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+  .doc-header .meta span { display: flex; align-items: center; gap: 5px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  /* Scene block */
+  .scene { border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 28px; overflow: hidden; }
+  .scene-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 13px 20px;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f7f8fa;
+  }
+  .scene-num {
+    font-family: "Courier New", monospace;
+    font-size: 11px; font-weight: 700;
+    background: #1f2328; color: #fff;
+    padding: 3px 8px; border-radius: 4px;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+  }
+  .scene-title { font-size: 15px; font-weight: 700; flex: 1; }
+  .scene-timing {
+    font-family: "Courier New", monospace;
+    font-size: 11px; color: #57606a;
+    background: #e5e7eb; padding: 3px 8px; border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .scene-body { padding: 18px 22px; display: flex; flex-direction: column; gap: 16px; }
+
+  /* Cue block */
+  .cue { display: flex; gap: 14px; }
+  .cue-label {
+    font-family: "Courier New", monospace;
+    font-size: 10px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.07em;
+    padding: 3px 7px; border-radius: 4px;
+    white-space: nowrap;
+    height: fit-content;
+    margin-top: 2px;
+  }
+  .cue-label.visual  { background: #eff6ff; color: #2563eb; }
+  .cue-label.dialog  { background: #f0fdf4; color: #059669; }
+  .cue-label.note    { background: #fef9c3; color: #92400e; }
+
+  .cue-text { font-size: 14px; color: #1f2328; }
+  .cue-text.dialog-text { font-size: 15px; font-style: italic; line-height: 1.65; }
+  .cue-text.note-text   { font-size: 13px; color: #57606a; }
+
+  /* Key metrics strip */
+  .metrics { display: flex; gap: 10px; flex-wrap: wrap; padding: 12px 16px; background: #f7f8fa; border-radius: 7px; border: 1px solid #e5e7eb; }
+  .metric { display: flex; flex-direction: column; gap: 2px; }
+  .metric-val { font-size: 17px; font-weight: 800; }
+  .metric-lbl { font-size: 11px; color: #57606a; text-transform: uppercase; letter-spacing: 0.05em; font-family: "Courier New", monospace; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid #e5e7eb; margin: 4px 0; }
+
+  /* Summary table */
+  .summary { border: 1px solid #e5e7eb; border-radius: 10px; overflow: hidden; margin-bottom: 28px; }
+  .summary table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .summary thead th { background: #f7f8fa; padding: 9px 14px; text-align: left; font-weight: 700; color: #57606a; text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; border-bottom: 1px solid #e5e7eb; }
+  .summary tbody td { padding: 9px 14px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  .summary tbody tr:last-child td { border-bottom: none; }
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .tag-blue  { background: #eff6ff; color: #2563eb; }
+  .tag-green { background: #f0fdf4; color: #059669; }
+  .tag-red   { background: #fef2f2; color: #dc2626; }
+  .tag-purple{ background: #f5f3ff; color: #7c3aed; }
+  .tag-amber { background: #fffbeb; color: #d97706; }
+
+  /* Footer */
+  .page-footer { margin-top: 40px; padding-top: 14px; border-top: 1px solid #e5e7eb; text-align: center; font-size: 12px; color: #9ca3af; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  
+  <div class="doc-header">
+    <h1>LegacyX — Presentation Dialog Script</h1>
+    <p style="font-size:14px;color:#57606a;margin-top:6px">Speaker script and visual cue sheet for the 7-scene modernization engine demo video.</p>
+    <div class="meta">
+      <span><span class="dot" style="background:#2563eb"></span> 7 Scenes</span>
+      <span><span class="dot" style="background:#059669"></span> ~3 min 00 sec total runtime</span>
+      <span><span class="dot" style="background:#7c3aed"></span> 30 fps · 1920 × 1080</span>
+      <span><span class="dot" style="background:#d97706"></span> Audience: Enterprise Architects, VPs of Engineering, CISOs</span>
+    </div>
+  </div>
+
+  
+  <div class="summary">
+    <table>
+      <thead><tr><th>#</th><th>Scene</th><th>Duration</th><th>Core message</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1</strong></td><td>The Enterprise Challenge</td><td>0:00 – 0:25</td><td>Legacy Java 8/11 traps 65 %+ of enterprise workloads</td></tr>
+        <tr><td><strong>2</strong></td><td>Dual-Layer Architecture</td><td>0:25 – 0:50</td><td>React/Express governance plane + IBM Bob 2.0 execution engine</td></tr>
+        <tr><td><strong>3</strong></td><td>Pre-Flight Risk Scorecard</td><td>0:50 – 1:20</td><td>AST deep-scan scores the repo 24/100 — critical debt confirmed</td></tr>
+        <tr><td><strong>4</strong></td><td>Bob 2.0 Multi-Agent Swarm</td><td>1:20 – 1:55</td><td>Three subagents refactor AST, POM, and tests in parallel</td></tr>
+        <tr><td><strong>5</strong></td><td>Side-by-Side Code Diff</td><td>1:55 – 2:25</td><td>Visual verification: javax → jakarta, POJO → immutable record</td></tr>
+        <tr><td><strong>6</strong></td><td>Autonomous Build-Test Loop</td><td>2:25 – 2:45</td><td>mvn clean test passes 34/34 with zero regressions</td></tr>
+        <tr><td><strong>7</strong></td><td>Slack Approval &amp; Outro</td><td>2:45 – 3:00</td><td>Score 24→98, PR staged, governance gate approved</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 01</span>
+      <span class="scene-title">The Enterprise Java Modernization Challenge</span>
+      <span class="scene-timing">0:00 – 0:25</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Hero title animates in. Three problem cards spring up one by one: Technical Debt (red), Security Exposure (orange), Migration Friction (blue). Solution banner fades in at the bottom.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "Meet the problem every enterprise already knows.<br /><br />
+          Over sixty-five percent of enterprise Java workloads are still locked to Java 8 or 11 — not by choice, but because the cost of migration has always outweighed the benefit.<br /><br />
+          Critical CVEs like Log4Shell and Spring4Shell are sitting unpatched in production. We're talking CVSS ten-point-zero vulnerabilities with known public exploits, exposed to the open internet.<br /><br />
+          And when engineering teams finally decide to act, a typical migration consumes six to eighteen months of developer time — just to move one repository.<br /><br />
+          LegacyX eliminates that toil entirely. Multi-agent AST orchestration, deterministic build loops, and governance gates — delivering a ninety-seven-point-five percent faster migration cycle."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">Pause briefly on each card before the banner appears. Let the "97.5% Faster Delivery" metric land before cutting to scene 2.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 02</span>
+      <span class="scene-title">Dual-Layer Architecture &amp; Pipeline</span>
+      <span class="scene-timing">0:25 – 0:50</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Two architecture layer cards slide in. Layer 1 (blue — React/Express governance) followed by Layer 2 (purple — IBM Bob 2.0 execution). The five-step pipeline bar then scales in beneath them.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "LegacyX is built on two complementary layers.<br /><br />
+          Layer one is the governance and visual interface — a React and Express control plane that handles repository ingestion, real-time risk scoring, an interactive diff viewer, and Slack-based approval gates. Everything a developer or architect needs to stay in control.<br /><br />
+          Layer two is the execution engine, powered by IBM Bob 2.0. This is where the actual refactoring happens — isolated sandboxes, deep AST and POM parsing, and a coordinated swarm of three subagents running in parallel.<br /><br />
+          Together, they form a five-step pipeline: repository ingestion, deep scan and scoring, multi-agent refactoring, deterministic build verification, and final Slack delivery with pull request creation. Every step is automated. Every step is governed."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">Point to the pipeline step numbers as you name each one. Emphasise "isolated" and "governed" — these are the key differentiators for enterprise buyers.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 03</span>
+      <span class="scene-title">Pre-Flight Scan &amp; Risk Scorecard</span>
+      <span class="scene-timing">0:50 – 1:20</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Repo URL bar shows scanning progress (0–100%). Score card reveals with a red gauge animating to 24/100. Right-side cards show the current vs target runtime comparison plus CVE count, effort estimate, and AST recipe.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "We point LegacyX at a real enterprise repository — account-service, branch main — and trigger the pre-flight scan.<br /><br />
+          In seconds, the AST engine parses all forty-eight Java source files and the full Maven dependency graph. It applies forty-seven modernization rules and returns a score.<br /><br />
+          This repository scores twenty-four out of one hundred. That's a critical debt rating.<br /><br />
+          On the right, we can see exactly why: the service is running Java 8 with Spring Boot 2.7, using the old javax-dot-star namespace. It has four end-of-life dependencies, and the scanner has flagged four critical CVEs — including Log4Shell at CVSS ten-point-zero.<br /><br />
+          If this were done manually, it would cost an estimated three hundred and twenty developer hours across one hundred and forty-two source files. LegacyX's OpenRewrite recipe is already queued and ready for execution."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">The gauge animation runs as you speak. Time the "twenty-four out of one hundred" line to land as the gauge stops. The "320 hours" stat creates a strong ROI contrast — linger on it.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 04</span>
+      <span class="scene-title">IBM Bob 2.0 Multi-Agent Modernization Swarm</span>
+      <span class="scene-timing">1:20 – 1:55</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Swarm status bar shows live counters (files, AST edits, Java 21 records, execution %). Three agent cards spring in — Alpha (blue), Beta (purple), Gamma (green). Terminal streams live log output from all three subagents.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "Now Bob 2.0 takes over. Three specialised subagents are dispatched simultaneously into the isolated sandbox.<br /><br />
+          Subagent Alpha is the AST core. It's scanning every Java source file, converting mutable POJOs into immutable Java 21 records, migrating all javax-dot-star imports to jakarta-dot-star, and replacing deprecated API calls with their modern equivalents.<br /><br />
+          Subagent Beta owns the dependency graph. It's upgrading the Spring Boot parent POM from 2.1.8 to 3.3.4, bumping the Maven compiler release to Java 21, and — critically — patching the Log4j CVE by upgrading to version 2.23.1.<br /><br />
+          Subagent Gamma handles the test suite. JUnit 4 annotations are being rewritten to JUnit Jupiter, lifecycle hooks like @Before become @BeforeEach, and Mockito 2 is upgraded to Mockito 5 with full Java 21 compatibility.<br /><br />
+          You're watching one hundred and forty-two AST transformations happen autonomously — live, in real time."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">Match pacing to the terminal scroll — the three-colour log output (blue/purple/green per agent) visually reinforces the parallel nature of the swarm. This is the demo's technical centrepiece; take your time.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 05</span>
+      <span class="scene-title">Side-by-Side AST Code Diff Viewer</span>
+      <span class="scene-timing">1:55 – 2:25</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Diff viewer springs in showing AccountDto.java tab first (first 15 sec). Tab automatically switches to pom.xml at the halfway point. Red lines on the left, green lines on the right throughout.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "Let's look at what the agents actually changed.<br /><br />
+          On the left: the legacy AccountDto class. Forty-eight lines of mutable boilerplate — a standard Java 8 POJO with getters, setters, and a manual equals and hashCode. It imports from the old javax.persistence and javax.validation namespaces.<br /><br />
+          On the right: the modernized version. The entire class is now a single Java 21 record — five lines. Immutable by default. Thread-safe. Zero boilerplate. And the imports have been migrated to jakarta.persistence and jakarta.validation.<br /><br />
+          That's a seventy-percent reduction in code, with no loss of functionality.<br /><br />
+          Switching to the POM — on the left, Spring Boot 2.1.8 and Java 8 with the Log4Shell vulnerability sitting in plain sight. On the right, Spring Boot 3.3.4, Java 21 LTS, and Log4j bumped to 2.23.1 — zero critical CVEs remaining."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">The tab switches automatically mid-scene. Align the pom.xml commentary to the second half. The red/green colour coding makes the changes self-evident — keep commentary concise.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 06</span>
+      <span class="scene-title">Autonomous Build-Test Verification Loop</span>
+      <span class="scene-timing">2:25 – 2:45</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">Maven console streams from top to bottom: compile phase (blue), test run (neutral), BUILD SUCCESS (bold green). Side cards show 34/34 test pass rate and the self-healing loop description. Status badge flips to BUILD PASS.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "With the refactoring complete, LegacyX runs a full mvn clean test inside the isolated sandbox — no human involvement, no manual trigger.<br /><br />
+          javac 21 compiles eighteen source files. Zero errors. Zero warnings.<br /><br />
+          JUnit 5 Jupiter fires up the surefire runner. AccountServiceTest: eighteen tests, zero failures. AccountControllerTest: sixteen tests, zero failures. Total: thirty-four tests run, zero regressions, in under four seconds.<br /><br />
+          Code coverage integrity sits at ninety-eight-point-four percent.<br /><br />
+          And if compilation or a test had failed? Bob 2.0 would have inspected the surefire report, generated a targeted AST delta patch, and re-run — automatically. In this case, the OpenRewrite recipe converged on the first attempt."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">Time "zero regressions" to coincide with the BUILD SUCCESS line appearing in the terminal. The "1 Attempt" card on the right reinforces the deterministic convergence story — reference it directly.</span>
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-num">SCENE 07</span>
+      <span class="scene-title">Slack Delivery, Governance Approval &amp; Outro</span>
+      <span class="scene-timing">2:45 – 3:00</span>
+    </div>
+    <div class="scene-body">
+      <div class="cue">
+        <span class="cue-label visual">Visual</span>
+        <span class="cue-text">First: Governance gate card showing score shift 24→98, Java 21 + Spring 3.3.4 verified, 0 CVEs. Approve &amp; Merge button visible. Then transitions to the full-screen finale: "Zero Regressions. 100% Deterministic." with the GitHub link and LegacyX wordmark.</span>
+      </div>
+      <hr />
+      <div class="cue">
+        <span class="cue-label dialog">Dialog</span>
+        <span class="cue-text dialog-text">
+          "The final step is delivery. LegacyX posts a Block Kit governance card directly to Slack — with the full audit trail, test results, and a one-click 'Approve and Merge' button ready for the compliance officer or engineering lead.<br /><br />
+          The modernization score has moved from twenty-four to ninety-eight out of one hundred. The runtime is confirmed as Java 21 LTS with Spring Boot 3.3.4. Critical CVE count: zero.<br /><br />
+          Pull Request forty-two is staged and waiting. No manual toil. No regression risk. Fully auditable for SOC2 and FedRAMP compliance.<br /><br />
+          Zero regressions. One hundred percent deterministic.<br /><br />
+          This is LegacyX — enterprise Java modernization from Java 8 and 11 to Java 21 LTS and Spring Boot 3, fully automated, powered by IBM Bob 2.0.<br /><br />
+          Open source on GitHub at github.com/Chavenia/LegacyX."
+        </span>
+      </div>
+      <div class="cue">
+        <span class="cue-label note">Note</span>
+        <span class="cue-text note-text">Let the finale title card hold for 2–3 seconds of silence before audio out. The GitHub URL should be the last spoken word — it is the call to action.</span>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric-val" style="color:#dc2626">24</span>
+          <span class="metric-lbl">Score — Before</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:#059669">98/100</span>
+          <span class="metric-lbl">Score — After</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:#059669">0</span>
+          <span class="metric-lbl">Critical CVEs</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:#059669">34/34</span>
+          <span class="metric-lbl">Tests Passing</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:#2563eb">97.5%</span>
+          <span class="metric-lbl">Faster Delivery</span>
+        </div>
+        <div class="metric">
+          <span class="metric-val" style="color:#7c3aed">3 min</span>
+          <span class="metric-lbl">Total Runtime</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">Made with IBM Bob</div>
+</div>
+</body>
+</html>
