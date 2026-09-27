@@ -8,9 +8,18 @@ const sandboxManager = require('./services/sandboxManager');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for React Dashboard UI
+// Enable CORS — in production only allow requests from the Vercel frontend
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL]
+  : ['http://localhost:3000', 'http://localhost:5173'];
+
 app.use(cors({
-  origin: '*',
+  origin: (origin, callback) => {
+    // Allow requests with no Origin header (e.g. curl, Render health checks)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
