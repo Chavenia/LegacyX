@@ -9,7 +9,11 @@
     "test": "node test/test-scan.js",
     "remotion:studio": "npm --prefix frontend run remotion:studio",
     "remotion:render": "npm --prefix frontend run remotion:render",
-    "remotion:still": "npm --prefix frontend run remotion:still"
+    "remotion:still": "npm --prefix frontend run remotion:still",
+    "voiceover:generate": "node scripts/generate-gemini-voiceover.mjs",
+    "voiceover:generate:charon": "node scripts/generate-gemini-voiceover.mjs --voice=Charon",
+    "voiceover:generate:kore": "node scripts/generate-gemini-voiceover.mjs --voice=Kore",
+    "voiceover:generate:puck": "node scripts/generate-gemini-voiceover.mjs --voice=Puck"
   },
   "keywords": [
     "legacyx",

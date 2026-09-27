@@ -16,6 +16,10 @@ export const RemotionRoot = () => {
         defaultProps={{
           appName: 'LegacyX',
           version: '1.0.0',
+          enableVoiceover: true,
+          enableSubtitles: true,
+          voiceName: 'Gemini Charon',
+          volume: 1.0,
         }}
       />
     </>

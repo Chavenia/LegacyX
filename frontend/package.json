@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "remotion:studio": "remotion studio src/remotion/index.jsx",
     "remotion:render": "remotion render src/remotion/index.jsx LegacyXDemo out/legacyx-demo.mp4",
-    "remotion:still": "remotion still src/remotion/index.jsx LegacyXDemo out/thumbnail.png --frame=60"
+    "remotion:still": "remotion still src/remotion/index.jsx LegacyXDemo out/thumbnail.png --frame=60",
+    "voiceover:generate": "node ../scripts/generate-gemini-voiceover.mjs"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.6.0",

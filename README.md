@@ -105,3 +105,48 @@ npm run dev
 | `POST` | `/api/deliver` | Creates branch `feature/legacyx-modernization`, commits refactorings, prepares watsonx Slack card |
 | `GET` | `/api/sandboxes` | Lists active sandboxes |
 | `DELETE` | `/api/sandboxes/:id` | Cleans up specified sandbox directory |
+
+---
+
+## 🎬 Remotion Video Presentation & Gemini TTS Voiceovers
+
+LegacyX includes an enterprise 7-scene programmatic video presentation built with **Remotion v4** (`1920x1080 @ 30fps`, 3 minutes / 5,400 frames) and **Google Gemini 3.1 Flash TTS** (`gemini-3.1-flash-tts-preview`).
+
+### 1. Generate Voiceovers with Gemini Voices
+The script [`scripts/generate-gemini-voiceover.mjs`](file:///c:/Users/dave/Documents/Projects/LegacyX/scripts/generate-gemini-voiceover.mjs) maps to [`LegacyX_Presentation_Script.txt`](file:///c:/Users/dave/Documents/Projects/LegacyX/LegacyX_Presentation_Script.txt) and supports Director's Chair prompting and all Gemini TTS voices:
+
+```bash
+# Generate using default voice (Charon - Informative & Authoritative Architect)
+npm run voiceover:generate
+
+# Generate with specific Gemini voices:
+npm run voiceover:generate:kore    # Kore: Firm / Executive Leadership
+npm run voiceover:generate:puck    # Puck: Upbeat / Dynamic Tech Speaker
+npm run voiceover:generate:charon  # Charon: Informative / Technical Authority
+
+# Or with custom voice and scene filters:
+node scripts/generate-gemini-voiceover.mjs --voice=Sadaltager --scene=all
+```
+
+> **API Key Setup:** Set `GEMINI_API_KEY=your_key_here` in your `.env` file or pass `--key=YOUR_KEY`. If no key is set, the generator automatically uses the local speech synthesizer fallback so the video is immediately playable with synchronized audio.
+
+### 2. Preview and Render Remotion Video
+
+```bash
+# Launch interactive Remotion Studio (with live audio & timeline)
+npm run remotion:studio
+
+# Render full 1080p MP4 presentation video with voiceover
+npm run remotion:render
+# Output: frontend/out/legacyx-demo.mp4
+
+# Render thumbnail frame
+npm run remotion:still
+```
+
+### 3. In-App Video Modal
+The React Dashboard includes an interactive video player modal (`RemotionVideoModal`) with:
+- Synchronized voiceover audio and animated waveform indicator
+- Live subtitle captions toggle (CC)
+- Gemini Voice selector (`Charon`, `Kore`, `Puck`, `Fenrir`, `Aoede`, `Sadaltager`)
+- Instant chapter jump buttons for all 7 modernization scenes
