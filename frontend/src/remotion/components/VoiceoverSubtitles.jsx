@@ -1,117 +1,135 @@
 import React from 'react';
-import { interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { interpolate, useCurrentFrame } from 'remotion';
+
+/**
+ * Splits transcript text into timed subtitle segments proportional to sentence lengths,
+ * merging short fragments so each line has sufficient reading duration.
+ */
+function getSubtitleSegments(text, durationFrames) {
+  if (!text) return [];
+
+  // Strip audio tags [serious], [excitedly], etc. and clean extra whitespace
+  const cleaned = text.replace(/\[\w+\]/g, '').replace(/\s+/g, ' ').trim();
+
+  // Split on sentence boundaries (. ? !)
+  const rawSentences = cleaned
+    .split(/(?<=[.?!])\s+/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  if (rawSentences.length === 0) return [];
+
+  // Merge short fragments (< 35 chars) with adjacent sentences for natural subtitle pacing
+  const merged = [];
+  for (let i = 0; i < rawSentences.length; i++) {
+    const s = rawSentences[i];
+    if (merged.length > 0 && (s.length < 35 || merged[merged.length - 1].length < 35)) {
+      merged[merged.length - 1] += ' ' + s;
+    } else {
+      merged.push(s);
+    }
+  }
+
+  const totalChars = merged.reduce((acc, s) => acc + s.length, 0);
+  const startPadding = 10; // brief pause before first subtitle
+  const endPadding = 15;   // brief pause before scene cut
+  const usableDuration = Math.max(1, durationFrames - startPadding - endPadding);
+
+  let currentStart = startPadding;
+  return merged.map((sentence) => {
+    const fraction = sentence.length / totalChars;
+    const dur = Math.max(20, Math.round(fraction * usableDuration));
+    const startFrame = currentStart;
+    const endFrame = Math.min(durationFrames - endPadding, startFrame + dur);
+    currentStart = endFrame;
+
+    return {
+      text: sentence,
+      startFrame,
+      endFrame,
+    };
+  });
+}
 
 export const VoiceoverSubtitles = ({
   text,
-  voiceName = 'Charon',
-  showWave = true,
-  startOffsetFrame = 10,
-  durationFrames = 700
+  durationFrames = 750,
 }) => {
   const frame = useCurrentFrame();
-
-  // Opacity fade in and fade out
-  const opacity = interpolate(
-    frame,
-    [startOffsetFrame, startOffsetFrame + 15, durationFrames - 25, durationFrames],
-    [0, 1, 1, 0],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+  const segments = React.useMemo(
+    () => getSubtitleSegments(text, durationFrames),
+    [text, durationFrames]
   );
 
-  if (opacity <= 0.01) return null;
+  // Find active segment for the current frame
+  const currentSegment = segments.find(
+    (seg) => frame >= seg.startFrame && frame < seg.endFrame
+  );
 
-  // Animated audio bars
-  const waveBars = [0, 1, 2, 3, 4].map((i) => {
-    const freq = (frame * 0.25 + i * 1.2);
-    const height = 6 + Math.abs(Math.sin(freq)) * 14;
-    return height;
-  });
+  if (!currentSegment) return null;
+
+  // Safe fade duration calculation (at most 6 frames, or 1/4 of segment length)
+  const segmentLength = currentSegment.endFrame - currentSegment.startFrame;
+  const fade = Math.max(1, Math.min(6, Math.floor(segmentLength / 4)));
+  const fadeInEnd = currentSegment.startFrame + fade;
+  const fadeOutStart = currentSegment.endFrame - fade;
+
+  let opacity = 1;
+  if (frame < fadeInEnd && currentSegment.startFrame < fadeInEnd) {
+    opacity = interpolate(frame, [currentSegment.startFrame, fadeInEnd], [0, 1], {
+      extrapolateLeft: 'clamp',
+      extrapolateRight: 'clamp',
+    });
+  } else if (frame > fadeOutStart && fadeOutStart < currentSegment.endFrame) {
+    opacity = interpolate(frame, [fadeOutStart, currentSegment.endFrame], [1, 0], {
+      extrapolateLeft: 'clamp',
+      extrapolateRight: 'clamp',
+    });
+  }
+
+  if (opacity <= 0.01) return null;
 
   return (
     <div
       style={{
         position: 'absolute',
-        bottom: 24,
+        bottom: 32,
         left: 0,
         right: 0,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 50,
+        zIndex: 60,
         pointerEvents: 'none',
-        opacity,
+        padding: '0 48px',
       }}
     >
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 16,
-          backgroundColor: 'rgba(15, 23, 42, 0.88)',
-          backdropFilter: 'blur(12px)',
+          opacity,
+          backgroundColor: 'rgba(17, 24, 39, 0.85)',
+          backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.12)',
-          borderRadius: 30,
+          borderRadius: 8,
           padding: '10px 24px',
-          boxShadow: '0 12px 36px rgba(0, 0, 0, 0.45)',
-          maxWidth: 1400,
+          maxWidth: 1180,
+          textAlign: 'center',
+          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
         }}
       >
-        {/* Voiceover Badge & Waveform */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 3,
-              height: 20,
-              padding: '0 6px',
-            }}
-          >
-            {waveBars.map((h, idx) => (
-              <div
-                key={idx}
-                style={{
-                  width: 3,
-                  height: showWave ? h : 4,
-                  backgroundColor: '#38bdf8',
-                  borderRadius: 2,
-                  transition: 'height 0.05s ease',
-                }}
-              />
-            ))}
-          </div>
-
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              color: '#38bdf8',
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              fontFamily: '"IBM Plex Mono", monospace',
-              backgroundColor: 'rgba(56, 189, 248, 0.12)',
-              padding: '2px 8px',
-              borderRadius: 12,
-              border: '1px solid rgba(56, 189, 248, 0.25)',
-            }}
-          >
-            {voiceName}
-          </span>
-        </div>
-
-        {/* Subtitle Narration Text */}
         <p
           style={{
             margin: 0,
-            fontSize: 14,
+            fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            fontSize: 16,
             fontWeight: 500,
-            color: '#f8fafc',
+            color: '#f9fafb',
             lineHeight: 1.45,
             letterSpacing: '-0.01em',
-            textShadow: '0 1px 2px rgba(0,0,0,0.5)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.6)',
           }}
         >
-          {text}
+          {currentSegment.text}
         </p>
       </div>
     </div>

@@ -7,13 +7,10 @@ import { Scene4BobAgents } from './scenes/Scene4BobAgents';
 import { Scene5DiffViewer } from './scenes/Scene5DiffViewer';
 import { Scene6BuildLoop } from './scenes/Scene6BuildLoop';
 import { Scene7Outro } from './scenes/Scene7Outro';
-import { VoiceoverSubtitles } from './components/VoiceoverSubtitles';
 import { VOICEOVER_SCENES } from './voiceoverData';
 
 export const MainVideo = ({
   enableVoiceover = true,
-  enableSubtitles = true,
-  voiceName = 'Gemini Charon',
   volume = 1.0,
 }) => {
   return (
@@ -24,14 +21,6 @@ export const MainVideo = ({
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene1.wav')} volume={volume} />
         )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[0].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[0].durationInFrames}
-          />
-        )}
       </Sequence>
 
       {/* Scene 2: Dual-Layer Architecture & Pipeline (25s - 50s) */}
@@ -39,14 +28,6 @@ export const MainVideo = ({
         <Scene2Architecture />
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene2.wav')} volume={volume} />
-        )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[1].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[1].durationInFrames}
-          />
         )}
       </Sequence>
 
@@ -56,14 +37,6 @@ export const MainVideo = ({
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene3.wav')} volume={volume} />
         )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[2].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[2].durationInFrames}
-          />
-        )}
       </Sequence>
 
       {/* Scene 4: IBM Bob 2.0 Multi-Agent Swarm (80s - 115s) */}
@@ -71,14 +44,6 @@ export const MainVideo = ({
         <Scene4BobAgents />
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene4.wav')} volume={volume} />
-        )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[3].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[3].durationInFrames}
-          />
         )}
       </Sequence>
 
@@ -88,14 +53,6 @@ export const MainVideo = ({
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene5.wav')} volume={volume} />
         )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[4].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[4].durationInFrames}
-          />
-        )}
       </Sequence>
 
       {/* Scene 6: Deterministic Build-Test Loop (145s - 165s) */}
@@ -104,14 +61,6 @@ export const MainVideo = ({
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene6.wav')} volume={volume} />
         )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[5].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[5].durationInFrames}
-          />
-        )}
       </Sequence>
 
       {/* Scene 7: watsonx Slack Delivery & Outro (165s - 180s) */}
@@ -119,14 +68,6 @@ export const MainVideo = ({
         <Scene7Outro />
         {enableVoiceover && (
           <Audio src={staticFile('audio/scene7.wav')} volume={volume} />
-        )}
-        {enableSubtitles && (
-          <VoiceoverSubtitles
-            text={VOICEOVER_SCENES[6].dialogText}
-            voiceName={voiceName}
-            startOffsetFrame={15}
-            durationFrames={VOICEOVER_SCENES[6].durationInFrames}
-          />
         )}
       </Sequence>
     </div>

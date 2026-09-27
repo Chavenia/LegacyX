@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { Player } from '@remotion/player';
 import { MainVideo } from '../remotion/MainVideo';
-import { X, Terminal, Mic, Volume2, VolumeX, Subtitles, Sparkles } from 'lucide-react';
+import { X, Terminal, Volume2, VolumeX } from 'lucide-react';
 
 export const RemotionVideoModal = ({ isOpen, onClose }) => {
   const playerRef = useRef(null);
   const [enableVoiceover, setEnableVoiceover] = useState(true);
-  const [enableSubtitles, setEnableSubtitles] = useState(true);
-  const [selectedVoice, setSelectedVoice] = useState('Charon');
 
   if (!isOpen) return null;
 
@@ -25,22 +23,13 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
     if (playerRef.current) playerRef.current.seekTo(frame);
   };
 
-  const geminiVoices = [
-    { id: 'Charon', label: 'Charon (Informative / Architect)', style: 'Authoritative & Clear' },
-    { id: 'Kore', label: 'Kore (Firm / Executive)', style: 'Executive Leadership' },
-    { id: 'Puck', label: 'Puck (Upbeat / Engaging)', style: 'Dynamic Tech Speaker' },
-    { id: 'Sadaltager', label: 'Sadaltager (Knowledgeable)', style: 'Engineering Fellow' },
-    { id: 'Fenrir', label: 'Fenrir (Excitable)', style: 'High Energy Demo' },
-    { id: 'Aoede', label: 'Aoede (Breezy)', style: 'Approachable Specialist' },
-  ];
-
   return (
     <div
       style={{
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        backgroundColor: 'rgba(0,0,0,0.5)',
+        backgroundColor: 'rgba(0,0,0,0.55)',
         backdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
@@ -73,83 +62,40 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
             gap: 12,
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>
               LegacyX Presentation Video
             </span>
             <span
               style={{
                 fontSize: 11,
-                backgroundColor: '#eff6ff',
-                color: '#2563eb',
+                backgroundColor: '#f3f4f6',
+                color: '#6b7280',
                 padding: '2px 8px',
                 borderRadius: 4,
-                border: '1px solid #bfdbfe',
+                border: '1px solid #e5e7eb',
                 fontFamily: '"IBM Plex Mono", monospace',
                 fontWeight: 600,
               }}
             >
               1080p · 30fps · 3:00
             </span>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 5,
-                backgroundColor: '#f0fdf4',
-                border: '1px solid #bbf7d0',
-                padding: '2px 8px',
-                borderRadius: 12,
-                fontSize: 11,
-                color: '#15803d',
-                fontWeight: 600,
-              }}
-            >
-              <Sparkles size={12} />
-              <span>Gemini 3.1 Flash TTS</span>
-            </div>
           </div>
 
-          {/* Voiceover Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* Voice selector */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Mic size={14} color="#6b7280" />
-              <select
-                value={selectedVoice}
-                onChange={(e) => setSelectedVoice(e.target.value)}
-                style={{
-                  fontSize: 12,
-                  padding: '4px 8px',
-                  borderRadius: 6,
-                  border: '1px solid #d1d5db',
-                  backgroundColor: '#ffffff',
-                  color: '#374151',
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                }}
-              >
-                {geminiVoices.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
+          {/* Clean Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {/* Toggle voiceover */}
             <button
               onClick={() => setEnableVoiceover(!enableVoiceover)}
               style={{
-                background: enableVoiceover ? '#eff6ff' : '#f3f4f6',
-                border: `1px solid ${enableVoiceover ? '#bfdbfe' : '#e5e7eb'}`,
+                background: enableVoiceover ? '#ffffff' : '#f3f4f6',
+                border: '1px solid #e5e7eb',
                 color: enableVoiceover ? '#2563eb' : '#6b7280',
                 cursor: 'pointer',
-                padding: '5px 10px',
+                padding: '5px 12px',
                 borderRadius: 6,
                 display: 'flex',
                 alignItems: 'center',
@@ -160,29 +106,7 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
               title={enableVoiceover ? 'Mute Voiceover' : 'Enable Voiceover'}
             >
               {enableVoiceover ? <Volume2 size={14} /> : <VolumeX size={14} />}
-              <span>Voice: {enableVoiceover ? 'ON' : 'OFF'}</span>
-            </button>
-
-            {/* Toggle subtitles */}
-            <button
-              onClick={() => setEnableSubtitles(!enableSubtitles)}
-              style={{
-                background: enableSubtitles ? '#f5f3ff' : '#f3f4f6',
-                border: `1px solid ${enableSubtitles ? '#ddd6fe' : '#e5e7eb'}`,
-                color: enableSubtitles ? '#7c3aed' : '#6b7280',
-                cursor: 'pointer',
-                padding: '5px 10px',
-                borderRadius: 6,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                fontSize: 12,
-                fontWeight: 500,
-              }}
-              title="Toggle Subtitles"
-            >
-              <Subtitles size={14} />
-              <span>CC: {enableSubtitles ? 'ON' : 'OFF'}</span>
+              <span>Voiceover: {enableVoiceover ? 'ON' : 'OFF'}</span>
             </button>
 
             {/* Close button */}
@@ -220,8 +144,6 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
             loop={false}
             inputProps={{
               enableVoiceover,
-              enableSubtitles,
-              voiceName: `Gemini ${selectedVoice}`,
               volume: 1.0,
             }}
             style={{ width: '100%', aspectRatio: '16/9' }}
@@ -290,7 +212,7 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
               <span>Render: <code style={{ color: '#374151', backgroundColor: '#f3f4f6', padding: '2px 6px', borderRadius: 4, border: '1px solid #e5e7eb', fontFamily: '"IBM Plex Mono", monospace' }}>npm run remotion:render</code></span>
             </div>
           </div>
-          <span style={{ fontSize: 11 }}>Remotion v4 · 5400 frames · 7 Scenes</span>
+          <span style={{ fontSize: 11 }}>Remotion v4 · 5400 frames</span>
         </div>
       </div>
     </div>
