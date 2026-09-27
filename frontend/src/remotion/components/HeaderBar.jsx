@@ -8,7 +8,7 @@ export const HeaderBar = ({ sceneNumber, sceneTitle, totalScenes = 7, startFrame
   const minutes = Math.floor(frame / (30 * 60));
   const seconds = Math.floor((frame / 30) % 60);
   const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  const totalFrames = 5400; // 3 minutes
+  const totalFrames = 5400;
   const progressPercent = Math.min(100, Math.max(0, (frame / totalFrames) * 100));
 
   return (
@@ -19,8 +19,8 @@ export const HeaderBar = ({ sceneNumber, sceneTitle, totalScenes = 7, startFrame
         left: 0,
         right: 0,
         height: 60,
-        backgroundColor: '#0E1013',
-        borderBottom: '1px solid #23262D',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #e5e7eb',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -29,44 +29,26 @@ export const HeaderBar = ({ sceneNumber, sceneTitle, totalScenes = 7, startFrame
         fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      {/* Brand logo & sidecar badge */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div
+      {/* Brand */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#111827', letterSpacing: '-0.02em' }}>
+          LegacyX
+        </span>
+        <span
           style={{
-            width: 30,
-            height: 30,
-            backgroundColor: '#2563eb',
-            borderRadius: 6,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 800,
-            fontSize: 14,
-            color: '#fff',
+            fontSize: 11,
+            fontWeight: 600,
+            textTransform: 'uppercase',
+            padding: '2px 8px',
+            borderRadius: 4,
+            backgroundColor: '#f3f4f6',
+            color: '#6b7280',
+            border: '1px solid #e5e7eb',
+            letterSpacing: '0.04em',
           }}
         >
-          LX
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 16, fontWeight: 700, color: '#ffffff', letterSpacing: '-0.02em' }}>
-            LegacyX
-          </span>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              padding: '2px 8px',
-              borderRadius: 4,
-              backgroundColor: '#16181E',
-              color: '#9CA3AF',
-              border: '1px solid #262830',
-              letterSpacing: '0.04em',
-            }}
-          >
-            Autonomous Modernization Sidecar
-          </span>
-        </div>
+          Java Modernization
+        </span>
       </div>
 
       {/* Center scene indicator */}
@@ -80,34 +62,32 @@ export const HeaderBar = ({ sceneNumber, sceneTitle, totalScenes = 7, startFrame
             backgroundColor: '#10b981',
           }}
         />
-        <span style={{ fontSize: 13, color: '#9CA3AF', fontWeight: 500 }}>
-          <strong style={{ color: '#ffffff', fontWeight: 600 }}>Scene {sceneNumber}/{totalScenes}:</strong> {sceneTitle}
+        <span style={{ fontSize: 13, color: '#6b7280', fontWeight: 500 }}>
+          <strong style={{ color: '#111827', fontWeight: 600 }}>Scene {sceneNumber}/{totalScenes}:</strong> {sceneTitle}
         </span>
       </div>
 
-      {/* Right timer & progress */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            fontFamily: '"IBM Plex Mono", monospace',
-            fontSize: 12,
-            color: '#9CA3AF',
-            backgroundColor: '#14161A',
-            padding: '4px 10px',
-            borderRadius: 4,
-            border: '1px solid #23262D',
-          }}
-        >
-          <span style={{ color: '#60a5fa', fontWeight: 600 }}>{formattedTime}</span>
-          <span style={{ color: '#4b5563' }}>/</span>
-          <span>03:00</span>
-        </div>
+      {/* Right: timer */}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          fontFamily: '"IBM Plex Mono", monospace',
+          fontSize: 12,
+          color: '#6b7280',
+          backgroundColor: '#f9fafb',
+          padding: '4px 10px',
+          borderRadius: 4,
+          border: '1px solid #e5e7eb',
+        }}
+      >
+        <span style={{ color: '#2563eb', fontWeight: 600 }}>{formattedTime}</span>
+        <span style={{ color: '#d1d5db' }}>/</span>
+        <span>03:00</span>
       </div>
 
-      {/* Bottom thin progress line */}
+      {/* Bottom progress line */}
       <div
         style={{
           position: 'absolute',

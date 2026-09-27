@@ -245,7 +245,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col relative bg-[#0B0C0E] text-neutral-200 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 overflow-x-hidden">
       {/* Header */}
       <Header
         backendConnected={backendConnected}
@@ -256,7 +256,7 @@ function Dashboard() {
       />
 
       {/* Main Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-6 py-8 relative z-10">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 md:px-6 py-8">
 
         {/* Repo Input */}
         <RepoInput onScan={handleScan} isScanning={isScanning} scanStep={scanStep} />
@@ -271,126 +271,16 @@ function Dashboard() {
           />
         )}
 
-        {/* Empty State Hero & 3 Feature Cards */}
+        {/* Empty state */}
         {!scanData && !isScanning && (
-          <div className="my-8">
-            {/* Hero Section */}
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#14161A] border border-[#23262D] mb-4">
-                <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span className="text-xs font-semibold tracking-wider text-neutral-300 uppercase font-mono">
-                  Autonomous Developer Governance Sidecar
-                </span>
-              </div>
-
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white mb-2.5">
-                Ready to Modernize Enterprise Java Workloads.
-              </h2>
-              <p className="text-sm text-neutral-400 max-w-2xl mx-auto leading-relaxed">
-                LegacyX automates the high-risk migration of Java 8 &amp; 11 codebases to{' '}
-                <strong className="text-blue-400 font-medium">Java 21 LTS</strong>,{' '}
-                <strong className="text-purple-400 font-medium">Spring Boot 3.3</strong>, and{' '}
-                <strong className="text-emerald-400 font-medium">Jakarta EE 10</strong> with multi-agent AST orchestration.
-              </p>
-            </div>
-
-            {/* 3 Flat Clean Feature Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-5xl mx-auto">
-              
-              {/* Card 1: Pre-Flight Scan */}
-              <article className="relative flex flex-col justify-between rounded-xl bg-[#121418] p-5 border border-[#23262D]">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-blue-400 font-mono">
-                      Phase 01
-                    </span>
-                    <span className="text-lg font-mono font-bold text-red-400">
-                      0–100
-                    </span>
-                  </div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">
-                    Pre-Flight Risk Scorecard
-                  </h3>
-                  <p className="text-xs text-neutral-400 leading-relaxed mb-4">
-                    Scans pom.xml dependencies, EOL runtimes, and Java AST structures to compute risk metrics and identify Log4Shell/Spring4Shell CVEs.
-                  </p>
-                </div>
-                <div className="border-t border-[#202227] pt-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-semibold">
-                      01
-                    </div>
-                    <div>
-                      <div className="text-xs font-medium text-white">AST Pre-Flight Engine</div>
-                      <div className="text-[11px] text-neutral-400">Automated Lexical Scanner</div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              {/* Card 2: Bob 2.0 Refactor */}
-              <article className="relative flex flex-col justify-between rounded-xl bg-[#121418] p-5 border border-[#23262D]">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-purple-400 font-mono">
-                      Phase 02
-                    </span>
-                    <span className="text-lg font-mono font-bold text-purple-400">
-                      Swarm
-                    </span>
-                  </div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">
-                    IBM Bob 2.0 Swarm
-                  </h3>
-                  <p className="text-xs text-neutral-400 leading-relaxed mb-4">
-                    Autonomous subagents execute AST refactoring in parallel: Subagent Alpha (AST Records), Subagent Beta (POM), Subagent Gamma (JUnit 5).
-                  </p>
-                </div>
-                <div className="border-t border-[#202227] pt-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded bg-purple-600 flex items-center justify-center text-white text-xs font-semibold">
-                      02
-                    </div>
-                    <div>
-                      <div className="text-xs font-medium text-white">Multi-Agent Core</div>
-                      <div className="text-[11px] text-neutral-400">OpenRewrite + Deterministic AST</div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-              {/* Card 3: Governed Delivery */}
-              <article className="relative flex flex-col justify-between rounded-xl bg-[#121418] p-5 border border-[#23262D]">
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-emerald-400 font-mono">
-                      Phase 03
-                    </span>
-                    <span className="text-lg font-mono font-bold text-emerald-400">
-                      100%
-                    </span>
-                  </div>
-                  <h3 className="text-base font-semibold text-white mb-1.5">
-                    Governed Slack Delivery
-                  </h3>
-                  <p className="text-xs text-neutral-400 leading-relaxed mb-4">
-                    Validates code with an autonomous mvn test loop, commits to a clean branch, and sends watsonx Slack Block Kit cards for 1-click merge approvals.
-                  </p>
-                </div>
-                <div className="border-t border-[#202227] pt-3.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded bg-emerald-600 flex items-center justify-center text-white text-xs font-semibold">
-                      03
-                    </div>
-                    <div>
-                      <div className="text-xs font-medium text-white">watsonx Gateway</div>
-                      <div className="text-[11px] text-neutral-400">Deterministic Governance Gate</div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-
-            </div>
+          <div className="my-6 bg-white border border-gray-200 rounded-xl p-6 text-sm text-gray-600">
+            <p className="mb-3 text-gray-700 font-medium">How it works</p>
+            <ol className="list-decimal list-inside space-y-1.5 text-xs text-gray-500">
+              <li>Enter a Git repository URL above and click <strong className="text-gray-700">Scan Pre-Flight</strong> to parse Java ASTs, pom.xml, and CVEs.</li>
+              <li>Run the <strong className="text-gray-700">Bob 2.0 Modernization</strong> to migrate javax.* → jakarta.*, Java 21 Records, Spring Boot 3.3, and JUnit 5 in parallel.</li>
+              <li>Review the side-by-side AST diff, then run the <strong className="text-gray-700">build-test loop</strong> to verify zero regressions.</li>
+              <li>Click <strong className="text-gray-700">Deliver &amp; Request Approval</strong> to push to a branch and send a Slack approval card.</li>
+            </ol>
           </div>
         )}
 

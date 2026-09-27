@@ -8,19 +8,15 @@ export const Scene4BobAgents = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Progress of agent swarm execution
-  const executionPercent = Math.min(100, Math.floor(interpolate(frame, [0, 800], [0, 100], { extrapolateRight: 'clamp' })));
-
-  const filesProcessed = Math.min(48, Math.floor(interpolate(frame, [0, 800], [0, 48], { extrapolateRight: 'clamp' })));
+  const executionPercent   = Math.min(100, Math.floor(interpolate(frame, [0, 800], [0, 100], { extrapolateRight: 'clamp' })));
+  const filesProcessed     = Math.min(48,  Math.floor(interpolate(frame, [0, 800], [0, 48],  { extrapolateRight: 'clamp' })));
   const astTransformations = Math.min(142, Math.floor(interpolate(frame, [0, 800], [0, 142], { extrapolateRight: 'clamp' })));
-  const recordsGenerated = Math.min(12, Math.floor(interpolate(frame, [0, 800], [0, 12], { extrapolateRight: 'clamp' })));
+  const recordsGenerated   = Math.min(12,  Math.floor(interpolate(frame, [0, 800], [0, 12],  { extrapolateRight: 'clamp' })));
 
-  // Subagent card entrances
-  const agent1Spring = spring({ frame, fps, config: { damping: 14, stiffness: 80 } });
+  const agent1Spring = spring({ frame,        fps, config: { damping: 14, stiffness: 80 } });
   const agent2Spring = spring({ frame: frame - 30, fps, config: { damping: 14, stiffness: 80 } });
   const agent3Spring = spring({ frame: frame - 60, fps, config: { damping: 14, stiffness: 80 } });
 
-  // Terminal active line index
   const logStep = Math.floor(frame / 35);
   const terminalLogs = [
     'Initializing isolated sandbox at /tmp/legacyx-sandbox/sandbox_9843a...',
@@ -40,7 +36,6 @@ export const Scene4BobAgents = () => {
     '[Subagent Gamma] Replacing JUnit 4 Assert.assertEquals -> Assertions.assertEquals',
     'AST and Dependency Modernization 100% COMPLETE. Staging changes for build test...',
   ];
-
   const visibleLogs = terminalLogs.slice(0, Math.min(terminalLogs.length, logStep + 1));
 
   return (
@@ -48,243 +43,86 @@ export const Scene4BobAgents = () => {
       <VideoBackground />
       <HeaderBar sceneNumber={4} sceneTitle="IBM Bob 2.0 Multi-Agent Modernization Swarm" startFrame={2400} />
 
-      <div
-        style={{
-          position: 'absolute',
-          top: 70,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          padding: '0 80px',
-        }}
-      >
+      <div style={{ position: 'absolute', top: 70, left: 0, right: 0, bottom: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 80px' }}>
         {/* Swarm Status Bar */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: 1500,
-            backgroundColor: '#121418',
-            border: '1px solid #23262D',
-            borderRadius: 12,
-            padding: '12px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 20,
-          }}
-        >
+        <div style={{ width: '100%', maxWidth: 1500, backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: '12px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span
-              style={{
-                backgroundColor: '#2563eb',
-                color: '#fff',
-                fontSize: 11,
-                fontWeight: 700,
-                padding: '3px 10px',
-                borderRadius: 4,
-                letterSpacing: '0.06em',
-                fontFamily: '"IBM Plex Mono", monospace',
-              }}
-            >
+            <span style={{ backgroundColor: '#2563eb', color: '#fff', fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 4, letterSpacing: '0.06em', fontFamily: '"IBM Plex Mono", monospace' }}>
               BOB 2.0 SWARM
             </span>
-            <span style={{ fontSize: 15, color: '#ffffff', fontWeight: 600 }}>
-              Autonomous Multi-Agent Refactoring in Progress
-            </span>
+            <span style={{ fontSize: 15, color: '#111827', fontWeight: 600 }}>Autonomous Multi-Agent Refactoring in Progress</span>
           </div>
-
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#9CA3AF' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#6b7280' }}>
               <span>Files:</span>
-              <strong style={{ color: '#60a5fa', fontFamily: '"IBM Plex Mono", monospace' }}>
-                {filesProcessed} / 48
-              </strong>
+              <strong style={{ color: '#2563eb', fontFamily: '"IBM Plex Mono", monospace' }}>{filesProcessed} / 48</strong>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#9CA3AF' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#6b7280' }}>
               <span>AST Edits:</span>
-              <strong style={{ color: '#10b981', fontFamily: '"IBM Plex Mono", monospace' }}>
-                {astTransformations}
-              </strong>
+              <strong style={{ color: '#059669', fontFamily: '"IBM Plex Mono", monospace' }}>{astTransformations}</strong>
             </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#9CA3AF' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#6b7280' }}>
               <span>Java 21 Records:</span>
-              <strong style={{ color: '#c084fc', fontFamily: '"IBM Plex Mono", monospace' }}>
-                {recordsGenerated}
-              </strong>
+              <strong style={{ color: '#7c3aed', fontFamily: '"IBM Plex Mono", monospace' }}>{recordsGenerated}</strong>
             </div>
-
-            <div
-              style={{
-                backgroundColor: '#0B0C0E',
-                border: '1px solid #23262D',
-                padding: '4px 10px',
-                borderRadius: 4,
-                fontFamily: '"IBM Plex Mono", monospace',
-                fontSize: 12,
-                fontWeight: 600,
-                color: '#60a5fa',
-              }}
-            >
+            <div style={{ backgroundColor: '#f9fafb', border: '1px solid #e5e7eb', padding: '4px 10px', borderRadius: 4, fontFamily: '"IBM Plex Mono", monospace', fontSize: 12, fontWeight: 600, color: '#2563eb' }}>
               {executionPercent}%
             </div>
           </div>
         </div>
 
-        {/* 3 Subagents Row */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 20,
-            width: '100%',
-            maxWidth: 1500,
-            marginBottom: 20,
-          }}
-        >
-          {/* Subagent Alpha */}
-          <div
-            style={{
-              transform: `scale(${Math.max(0, agent1Spring)})`,
-              opacity: Math.max(0, Math.min(1, agent1Spring)),
-            }}
-          >
-            <UseLayoutsCard
-              badge="Subagent Alpha"
-              badgeColor="#60a5fa"
-              metric="AST Core"
-              metricColor="#38bdf8"
-              title="Java 21 Syntax & Records"
-              footerAuthor="AST Modernizer"
-              footerRole="javax -> jakarta, pattern matching"
-              footerAvatar={
-                <div style={{ backgroundColor: '#2563eb', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
-                  α
-                </div>
-              }
+        {/* 3 Subagents */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, width: '100%', maxWidth: 1500, marginBottom: 20 }}>
+          <div style={{ transform: `scale(${Math.max(0, agent1Spring)})`, opacity: Math.max(0, Math.min(1, agent1Spring)) }}>
+            <UseLayoutsCard badge="Subagent Alpha" badgeColor="#2563eb" metric="AST Core" metricColor="#0891b2" title="Java 21 Syntax & Records"
+              footerAuthor="AST Modernizer" footerRole="javax -> jakarta, pattern matching"
+              footerAvatar={<div style={{ backgroundColor: '#2563eb', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>α</div>}
             >
-              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#9CA3AF', fontSize: 13, lineHeight: 1.7 }}>
-                <li>Rewrites POJOs into immutable <strong style={{ color: '#60a5fa' }}>Java 21 records</strong></li>
-                <li>Migrates <code style={{ color: '#f87171' }}>javax.*</code> to <code style={{ color: '#34d399' }}>jakarta.*</code></li>
+              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#6b7280', fontSize: 13, lineHeight: 1.7 }}>
+                <li>Rewrites POJOs into immutable <strong style={{ color: '#2563eb' }}>Java 21 records</strong></li>
+                <li>Migrates <code style={{ color: '#ef4444' }}>javax.*</code> to <code style={{ color: '#059669' }}>jakarta.*</code></li>
                 <li>Replaces deprecated APIs with modern equivalents</li>
               </ul>
             </UseLayoutsCard>
           </div>
-
-          {/* Subagent Beta */}
-          <div
-            style={{
-              transform: `scale(${Math.max(0, agent2Spring)})`,
-              opacity: Math.max(0, Math.min(1, agent2Spring)),
-            }}
-          >
-            <UseLayoutsCard
-              badge="Subagent Beta"
-              badgeColor="#c084fc"
-              metric="Spring 3.3"
-              metricColor="#a855f7"
-              title="POM & Dependency Graph"
-              footerAuthor="Dependency Resolver"
-              footerRole="Parent POM, plugins, CVE patching"
-              footerAvatar={
-                <div style={{ backgroundColor: '#7c3aed', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
-                  β
-                </div>
-              }
+          <div style={{ transform: `scale(${Math.max(0, agent2Spring)})`, opacity: Math.max(0, Math.min(1, agent2Spring)) }}>
+            <UseLayoutsCard badge="Subagent Beta" badgeColor="#7c3aed" metric="Spring 3.3" metricColor="#7c3aed" title="POM & Dependency Graph"
+              footerAuthor="Dependency Resolver" footerRole="Parent POM, plugins, CVE patching"
+              footerAvatar={<div style={{ backgroundColor: '#7c3aed', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>β</div>}
             >
-              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#9CA3AF', fontSize: 13, lineHeight: 1.7 }}>
-                <li>Upgrades Spring Boot <code style={{ color: '#f87171' }}>2.1.8</code> to <strong style={{ color: '#c084fc' }}>3.3.4</strong></li>
+              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#6b7280', fontSize: 13, lineHeight: 1.7 }}>
+                <li>Upgrades Spring Boot <code style={{ color: '#ef4444' }}>2.1.8</code> to <strong style={{ color: '#7c3aed' }}>3.3.4</strong></li>
                 <li>Updates Maven compiler release to Java 21</li>
-                <li>Patches CVSS 10.0 Log4j vulnerability to <strong style={{ color: '#34d399' }}>2.23.1</strong></li>
+                <li>Patches CVSS 10.0 Log4j vulnerability to <strong style={{ color: '#059669' }}>2.23.1</strong></li>
               </ul>
             </UseLayoutsCard>
           </div>
-
-          {/* Subagent Gamma */}
-          <div
-            style={{
-              transform: `scale(${Math.max(0, agent3Spring)})`,
-              opacity: Math.max(0, Math.min(1, agent3Spring)),
-            }}
-          >
-            <UseLayoutsCard
-              badge="Subagent Gamma"
-              badgeColor="#34d399"
-              metric="Jupiter"
-              metricColor="#10b981"
-              title="JUnit 5 & Mockito 5"
-              footerAuthor="Test Modernizer"
-              footerRole="JUnit 4 to Jupiter assertions & annotations"
-              footerAvatar={
-                <div style={{ backgroundColor: '#059669', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 12 }}>
-                  γ
-                </div>
-              }
+          <div style={{ transform: `scale(${Math.max(0, agent3Spring)})`, opacity: Math.max(0, Math.min(1, agent3Spring)) }}>
+            <UseLayoutsCard badge="Subagent Gamma" badgeColor="#059669" metric="Jupiter" metricColor="#059669" title="JUnit 5 & Mockito 5"
+              footerAuthor="Test Modernizer" footerRole="JUnit 4 to Jupiter assertions & annotations"
+              footerAvatar={<div style={{ backgroundColor: '#059669', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 700, fontSize: 14 }}>γ</div>}
             >
-              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#9CA3AF', fontSize: 13, lineHeight: 1.7 }}>
-                <li>Transforms <code style={{ color: '#f87171' }}>@Test</code> to JUnit Jupiter</li>
-                <li>Rewrites lifecycle hooks (<code style={{ color: '#60a5fa' }}>@BeforeEach</code>)</li>
+              <ul style={{ margin: '6px 0 12px 0', paddingLeft: 16, color: '#6b7280', fontSize: 13, lineHeight: 1.7 }}>
+                <li>Transforms <code style={{ color: '#ef4444' }}>@Test</code> to JUnit Jupiter</li>
+                <li>Rewrites lifecycle hooks (<code style={{ color: '#2563eb' }}>@BeforeEach</code>)</li>
                 <li>Upgrades Mockito 2 to Mockito 5 with Java 21 compatibility</li>
               </ul>
             </UseLayoutsCard>
           </div>
         </div>
 
-        {/* Live Terminal Stream */}
-        <div
-          style={{
-            width: '100%',
-            maxWidth: 1500,
-            backgroundColor: '#121418',
-            border: '1px solid #23262D',
-            borderRadius: 12,
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: '#0E1013',
-              borderBottom: '1px solid #23262D',
-              padding: '10px 18px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#ef4444' }} />
-              <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#eab308' }} />
-              <span style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#10b981' }} />
-              <span style={{ marginLeft: 8, fontSize: 12, color: '#6B7280', fontFamily: '"IBM Plex Mono", monospace' }}>
-                legacyx-agent-worker-01 (AST Engine stdout)
-              </span>
-            </div>
-            <span style={{ fontSize: 11, color: '#10b981', fontFamily: '"IBM Plex Mono", monospace', fontWeight: 600 }}>
-              ● LIVE STREAMING
+        {/* Terminal */}
+        <div style={{ width: '100%', maxWidth: 1500, backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
+          <div style={{ backgroundColor: '#f9fafb', borderBottom: '1px solid #e5e7eb', padding: '10px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: 12, color: '#9ca3af', fontFamily: '"IBM Plex Mono", monospace' }}>
+              legacyx-agent-worker-01 (AST Engine stdout)
             </span>
+            <span style={{ fontSize: 11, color: '#059669', fontFamily: '"IBM Plex Mono", monospace', fontWeight: 600 }}>● LIVE STREAMING</span>
           </div>
-
-          <div
-            style={{
-              padding: '12px 18px',
-              fontFamily: '"IBM Plex Mono", monospace',
-              fontSize: 12,
-              lineHeight: 1.6,
-              height: 140,
-              overflow: 'hidden',
-              backgroundColor: '#0B0C0E',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-            }}
-          >
+          <div style={{ padding: '12px 18px', fontFamily: '"IBM Plex Mono", monospace', fontSize: 12, lineHeight: 1.6, height: 140, overflow: 'hidden', backgroundColor: '#f9fafb', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
             {visibleLogs.slice(-5).map((log, idx) => (
-              <div key={idx} style={{ color: log.includes('Alpha') ? '#60a5fa' : log.includes('Beta') ? '#c084fc' : log.includes('Gamma') ? '#34d399' : '#9CA3AF' }}>
-                <span style={{ color: '#4B5563', marginRight: 8 }}>&gt;</span>
+              <div key={idx} style={{ color: log.includes('Alpha') ? '#2563eb' : log.includes('Beta') ? '#7c3aed' : log.includes('Gamma') ? '#059669' : '#6b7280' }}>
+                <span style={{ color: '#d1d5db', marginRight: 8 }}>&gt;</span>
                 {log}
               </div>
             ))}

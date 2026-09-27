@@ -1,0 +1,263 @@
+LegacyX — Presentation Dialog Script
+======================================
+Speaker script and visual cue sheet for the 7-scene modernization engine demo video.
+
+7 Scenes · ~3 min 00 sec total runtime · 30 fps · 1920x1080
+Audience: Enterprise Architects, VPs of Engineering, CISOs
+
+AT-A-GLANCE
+-----------
+#  Scene                          Duration       Core Message
+1  The Enterprise Challenge       0:00 – 0:25    Legacy Java 8/11 traps 65%+ of enterprise workloads
+2  Dual-Layer Architecture        0:25 – 0:50    React/Express governance plane + IBM Bob 2.0 execution engine
+3  Pre-Flight Risk Scorecard      0:50 – 1:20    AST deep-scan scores the repo 24/100 — critical debt confirmed
+4  Bob 2.0 Multi-Agent Swarm      1:20 – 1:55    Three subagents refactor AST, POM, and tests in parallel
+5  Side-by-Side Code Diff         1:55 – 2:25    Visual verification: javax -> jakarta, POJO -> immutable record
+6  Autonomous Build-Test Loop     2:25 – 2:45    mvn clean test passes 34/34 with zero regressions
+7  Slack Approval & Outro         2:45 – 3:00    Score 24->98, PR staged, governance gate approved
+
+
+================================================================================
+SCENE 01 — The Enterprise Java Modernization Challenge          [0:00 – 0:25]
+================================================================================
+
+[VISUAL]
+Hero title animates in. Three problem cards spring up one by one: Technical Debt
+(red), Security Exposure (orange), Migration Friction (blue). Solution banner
+fades in at the bottom.
+
+[DIALOG]
+"Meet the problem every enterprise already knows.
+
+Over sixty-five percent of enterprise Java workloads are still locked to Java 8
+or 11 — not by choice, but because the cost of migration has always outweighed
+the benefit.
+
+Critical CVEs like Log4Shell and Spring4Shell are sitting unpatched in
+production. We're talking CVSS ten-point-zero vulnerabilities with known public
+exploits, exposed to the open internet.
+
+And when engineering teams finally decide to act, a typical migration consumes
+six to eighteen months of developer time — just to move one repository.
+
+LegacyX eliminates that toil entirely. Multi-agent AST orchestration,
+deterministic build loops, and governance gates — delivering a ninety-seven-
+point-five percent faster migration cycle."
+
+[NOTE]
+Pause briefly on each card before the banner appears. Let the "97.5% Faster
+Delivery" metric land before cutting to scene 2.
+
+
+================================================================================
+SCENE 02 — Dual-Layer Architecture & Pipeline                   [0:25 – 0:50]
+================================================================================
+
+[VISUAL]
+Two architecture layer cards slide in. Layer 1 (blue — React/Express governance)
+followed by Layer 2 (purple — IBM Bob 2.0 execution). The five-step pipeline bar
+then scales in beneath them.
+
+[DIALOG]
+"LegacyX is built on two complementary layers.
+
+Layer one is the governance and visual interface — a React and Express control
+plane that handles repository ingestion, real-time risk scoring, an interactive
+diff viewer, and Slack-based approval gates. Everything a developer or architect
+needs to stay in control.
+
+Layer two is the execution engine, powered by IBM Bob 2.0. This is where the
+actual refactoring happens — isolated sandboxes, deep AST and POM parsing, and a
+coordinated swarm of three subagents running in parallel.
+
+Together, they form a five-step pipeline: repository ingestion, deep scan and
+scoring, multi-agent refactoring, deterministic build verification, and final
+Slack delivery with pull request creation. Every step is automated. Every step
+is governed."
+
+[NOTE]
+Point to the pipeline step numbers as you name each one. Emphasise "isolated"
+and "governed" — these are the key differentiators for enterprise buyers.
+
+
+================================================================================
+SCENE 03 — Pre-Flight Scan & Risk Scorecard                     [0:50 – 1:20]
+================================================================================
+
+[VISUAL]
+Repo URL bar shows scanning progress (0–100%). Score card reveals with a red
+gauge animating to 24/100. Right-side cards show the current vs target runtime
+comparison plus CVE count, effort estimate, and AST recipe.
+
+[DIALOG]
+"We point LegacyX at a real enterprise repository — account-service, branch
+main — and trigger the pre-flight scan.
+
+In seconds, the AST engine parses all forty-eight Java source files and the full
+Maven dependency graph. It applies forty-seven modernization rules and returns a
+score.
+
+This repository scores twenty-four out of one hundred. That's a critical debt
+rating.
+
+On the right, we can see exactly why: the service is running Java 8 with Spring
+Boot 2.7, using the old javax-dot-star namespace. It has four end-of-life
+dependencies, and the scanner has flagged four critical CVEs — including
+Log4Shell at CVSS ten-point-zero.
+
+If this were done manually, it would cost an estimated three hundred and twenty
+developer hours across one hundred and forty-two source files. LegacyX's
+OpenRewrite recipe is already queued and ready for execution."
+
+[NOTE]
+The gauge animation runs as you speak. Time the "twenty-four out of one hundred"
+line to land as the gauge stops. The "320 hours" stat creates a strong ROI
+contrast — linger on it.
+
+
+================================================================================
+SCENE 04 — IBM Bob 2.0 Multi-Agent Modernization Swarm          [1:20 – 1:55]
+================================================================================
+
+[VISUAL]
+Swarm status bar shows live counters (files, AST edits, Java 21 records,
+execution %). Three agent cards spring in — Alpha (blue), Beta (purple), Gamma
+(green). Terminal streams live log output from all three subagents.
+
+[DIALOG]
+"Now Bob 2.0 takes over. Three specialised subagents are dispatched
+simultaneously into the isolated sandbox.
+
+Subagent Alpha is the AST core. It's scanning every Java source file, converting
+mutable POJOs into immutable Java 21 records, migrating all javax-dot-star
+imports to jakarta-dot-star, and replacing deprecated API calls with their modern
+equivalents.
+
+Subagent Beta owns the dependency graph. It's upgrading the Spring Boot parent
+POM from 2.1.8 to 3.3.4, bumping the Maven compiler release to Java 21, and —
+critically — patching the Log4j CVE by upgrading to version 2.23.1.
+
+Subagent Gamma handles the test suite. JUnit 4 annotations are being rewritten
+to JUnit Jupiter, lifecycle hooks like @Before become @BeforeEach, and Mockito 2
+is upgraded to Mockito 5 with full Java 21 compatibility.
+
+You're watching one hundred and forty-two AST transformations happen autonomously
+— live, in real time."
+
+[NOTE]
+Match pacing to the terminal scroll — the three-colour log output (blue/purple/
+green per agent) visually reinforces the parallel nature of the swarm. This is
+the demo's technical centrepiece; take your time.
+
+
+================================================================================
+SCENE 05 — Side-by-Side AST Code Diff Viewer                    [1:55 – 2:25]
+================================================================================
+
+[VISUAL]
+Diff viewer springs in showing AccountDto.java tab first (first 15 sec). Tab
+automatically switches to pom.xml at the halfway point. Red lines on the left,
+green lines on the right throughout.
+
+[DIALOG]
+"Let's look at what the agents actually changed.
+
+On the left: the legacy AccountDto class. Forty-eight lines of mutable
+boilerplate — a standard Java 8 POJO with getters, setters, and a manual equals
+and hashCode. It imports from the old javax.persistence and javax.validation
+namespaces.
+
+On the right: the modernized version. The entire class is now a single Java 21
+record — five lines. Immutable by default. Thread-safe. Zero boilerplate. And
+the imports have been migrated to jakarta.persistence and jakarta.validation.
+
+That's a seventy-percent reduction in code, with no loss of functionality.
+
+Switching to the POM — on the left, Spring Boot 2.1.8 and Java 8 with the
+Log4Shell vulnerability sitting in plain sight. On the right, Spring Boot 3.3.4,
+Java 21 LTS, and Log4j bumped to 2.23.1 — zero critical CVEs remaining."
+
+[NOTE]
+The tab switches automatically mid-scene. Align the pom.xml commentary to the
+second half. The red/green colour coding makes the changes self-evident — keep
+commentary concise.
+
+
+================================================================================
+SCENE 06 — Autonomous Build-Test Verification Loop              [2:25 – 2:45]
+================================================================================
+
+[VISUAL]
+Maven console streams from top to bottom: compile phase (blue), test run
+(neutral), BUILD SUCCESS (bold green). Side cards show 34/34 test pass rate and
+the self-healing loop description. Status badge flips to BUILD PASS.
+
+[DIALOG]
+"With the refactoring complete, LegacyX runs a full mvn clean test inside the
+isolated sandbox — no human involvement, no manual trigger.
+
+javac 21 compiles eighteen source files. Zero errors. Zero warnings.
+
+JUnit 5 Jupiter fires up the surefire runner. AccountServiceTest: eighteen tests,
+zero failures. AccountControllerTest: sixteen tests, zero failures. Total:
+thirty-four tests run, zero regressions, in under four seconds.
+
+Code coverage integrity sits at ninety-eight-point-four percent.
+
+And if compilation or a test had failed? Bob 2.0 would have inspected the
+surefire report, generated a targeted AST delta patch, and re-run —
+automatically. In this case, the OpenRewrite recipe converged on the first
+attempt."
+
+[NOTE]
+Time "zero regressions" to coincide with the BUILD SUCCESS line appearing in the
+terminal. The "1 Attempt" card on the right reinforces the deterministic
+convergence story — reference it directly.
+
+
+================================================================================
+SCENE 07 — Slack Delivery, Governance Approval & Outro          [2:45 – 3:00]
+================================================================================
+
+[VISUAL]
+First: Governance gate card showing score shift 24->98, Java 21 + Spring 3.3.4
+verified, 0 CVEs. Approve & Merge button visible. Then transitions to full-screen
+finale: "Zero Regressions. 100% Deterministic." with the GitHub link and
+LegacyX wordmark.
+
+[DIALOG]
+"The final step is delivery. LegacyX posts a Block Kit governance card directly
+to Slack — with the full audit trail, test results, and a one-click 'Approve and
+Merge' button ready for the compliance officer or engineering lead.
+
+The modernization score has moved from twenty-four to ninety-eight out of one
+hundred. The runtime is confirmed as Java 21 LTS with Spring Boot 3.3.4.
+Critical CVE count: zero.
+
+Pull Request forty-two is staged and waiting. No manual toil. No regression
+risk. Fully auditable for SOC2 and FedRAMP compliance.
+
+Zero regressions. One hundred percent deterministic.
+
+This is LegacyX — enterprise Java modernization from Java 8 and 11 to Java 21
+LTS and Spring Boot 3, fully automated, powered by IBM Bob 2.0.
+
+Open source on GitHub at github.com/Chavenia/LegacyX."
+
+[NOTE]
+Let the finale title card hold for 2–3 seconds of silence before audio out.
+The GitHub URL should be the last spoken word — it is the call to action.
+
+
+================================================================================
+FINAL METRICS SUMMARY
+================================================================================
+
+  Modernization Score (Before):   24 / 100
+  Modernization Score (After):    98 / 100
+  Critical CVEs Remaining:        0
+  Tests Passing:                  34 / 34
+  Faster Delivery:                97.5%
+  Total Video Runtime:            ~3 min
+
+================================================================================

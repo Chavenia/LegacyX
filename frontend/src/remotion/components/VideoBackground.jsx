@@ -1,16 +1,12 @@
 import React from 'react';
 
-export const VideoBackground = ({
-  glowColor = '#3b82f6',
-}) => {
+export const VideoBackground = () => {
   return (
     <div
       style={{
         position: 'absolute',
         inset: 0,
-        backgroundColor: '#0B0C0E',
-        backgroundImage: 'radial-gradient(ellipse 80% 40% at 50% -5%, #151822 0%, #0B0C0E 100%)',
-        overflow: 'hidden',
+        backgroundColor: '#f4f5f7',
         fontFamily: '"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     />

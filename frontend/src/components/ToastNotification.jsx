@@ -1,24 +1,24 @@
 import React, { createContext, useContext, useState, useCallback, useRef } from 'react';
 import { CheckCircle2, XCircle, AlertTriangle, Info, X } from 'lucide-react';
 
-// ─── Context ────────────────────────────────────────────────────────────────
+// ─── Context ─────────────────────────────────────────────────────────────────
 const ToastContext = createContext(null);
 
 const ICONS = {
-  success: <CheckCircle2 className="w-4 h-4 text-carbon-green-50 shrink-0" />,
-  error:   <XCircle      className="w-4 h-4 text-carbon-red-60 shrink-0" />,
-  warning: <AlertTriangle className="w-4 h-4 text-carbon-yellow-30 shrink-0" />,
-  info:    <Info          className="w-4 h-4 text-carbon-blue-60 shrink-0" />,
+  success: <CheckCircle2  className="w-4 h-4 text-emerald-500 shrink-0" />,
+  error:   <XCircle       className="w-4 h-4 text-red-500 shrink-0" />,
+  warning: <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />,
+  info:    <Info          className="w-4 h-4 text-blue-500 shrink-0" />,
 };
 
 const BORDER = {
-  success: 'border-carbon-green-50',
-  error:   'border-carbon-red-60',
-  warning: 'border-carbon-yellow-30',
-  info:    'border-carbon-blue-60',
+  success: 'border-l-emerald-500',
+  error:   'border-l-red-500',
+  warning: 'border-l-amber-500',
+  info:    'border-l-blue-500',
 };
 
-// ─── Provider ────────────────────────────────────────────────────────────────
+// ─── Provider ─────────────────────────────────────────────────────────────────
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
   const nextId = useRef(0);
@@ -46,17 +46,16 @@ export function ToastProvider({ children }) {
         {toasts.map(t => (
           <div
             key={t.id}
-            className={`pointer-events-auto w-full bg-carbon-90 border-l-4 ${BORDER[t.type]} shadow-carbon-lg flex items-start gap-3 p-4 text-xs font-sans animate-fadeIn`}
-            style={{ animation: 'toastIn .2s ease-out' }}
+            className={`pointer-events-auto w-full bg-white border border-gray-200 border-l-4 ${BORDER[t.type]} shadow-md flex items-start gap-3 p-4 text-xs font-sans`}
           >
             {ICONS[t.type]}
             <div className="flex-1 min-w-0">
-              {t.title && <div className="font-semibold text-white mb-0.5">{t.title}</div>}
-              {t.message && <div className="text-carbon-30 leading-relaxed">{t.message}</div>}
+              {t.title   && <div className="font-semibold text-gray-900 mb-0.5">{t.title}</div>}
+              {t.message && <div className="text-gray-500 leading-relaxed">{t.message}</div>}
             </div>
             <button
               onClick={() => dismiss(t.id)}
-              className="text-carbon-50 hover:text-white transition cursor-pointer shrink-0 mt-0.5"
+              className="text-gray-400 hover:text-gray-700 transition cursor-pointer shrink-0 mt-0.5"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -67,7 +66,7 @@ export function ToastProvider({ children }) {
   );
 }
 
-// ─── Hook ────────────────────────────────────────────────────────────────────
+// ─── Hook ─────────────────────────────────────────────────────────────────────
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error('useToast must be used inside <ToastProvider>');
