@@ -16,6 +16,8 @@ export const RemotionRoot = () => {
         defaultProps={{
           appName: 'LegacyX',
           version: '1.0.0',
+          enableVoiceover: true,
+          volume: 1.0,
         }}
       />
     </>

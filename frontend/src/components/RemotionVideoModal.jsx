@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Player } from '@remotion/player';
 import { MainVideo } from '../remotion/MainVideo';
-import { X, Terminal } from 'lucide-react';
+import { X, Terminal, Volume2, VolumeX } from 'lucide-react';
 
 export const RemotionVideoModal = ({ isOpen, onClose }) => {
   const playerRef = useRef(null);
+  const [enableVoiceover, setEnableVoiceover] = useState(true);
 
   if (!isOpen) return null;
 
@@ -28,7 +29,8 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        backgroundColor: 'rgba(0,0,0,0.4)',
+        backgroundColor: 'rgba(0,0,0,0.55)',
+        backdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -40,31 +42,32 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
         style={{
           position: 'relative',
           width: '100%',
-          maxWidth: 1200,
+          maxWidth: 1240,
           backgroundColor: '#ffffff',
           border: '1px solid #e5e7eb',
           borderRadius: 12,
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+          boxShadow: '0 25px 70px rgba(0,0,0,0.25)',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal Header */}
         <div
           style={{
-            padding: '14px 20px',
+            padding: '12px 20px',
             backgroundColor: '#f9fafb',
             borderBottom: '1px solid #e5e7eb',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            gap: 12,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 15, fontWeight: 700, color: '#111827' }}>
-              LegacyX Demo Video
+              LegacyX Presentation Video
             </span>
             <span
               style={{
@@ -75,31 +78,60 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
                 borderRadius: 4,
                 border: '1px solid #e5e7eb',
                 fontFamily: '"IBM Plex Mono", monospace',
+                fontWeight: 600,
               }}
             >
-              1080p · 30fps · 3 min
+              1080p · 30fps · 3:00
             </span>
           </div>
-          <button
-            onClick={onClose}
-            style={{
-              background: '#f3f4f6',
-              border: '1px solid #e5e7eb',
-              color: '#6b7280',
-              cursor: 'pointer',
-              padding: '6px 10px',
-              borderRadius: 6,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <X size={16} />
-          </button>
+
+          {/* Clean Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            {/* Toggle voiceover */}
+            <button
+              onClick={() => setEnableVoiceover(!enableVoiceover)}
+              style={{
+                background: enableVoiceover ? '#ffffff' : '#f3f4f6',
+                border: '1px solid #e5e7eb',
+                color: enableVoiceover ? '#2563eb' : '#6b7280',
+                cursor: 'pointer',
+                padding: '5px 12px',
+                borderRadius: 6,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                fontSize: 12,
+                fontWeight: 500,
+              }}
+              title={enableVoiceover ? 'Mute Voiceover' : 'Enable Voiceover'}
+            >
+              {enableVoiceover ? <Volume2 size={14} /> : <VolumeX size={14} />}
+              <span>Voiceover: {enableVoiceover ? 'ON' : 'OFF'}</span>
+            </button>
+
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              style={{
+                background: '#f3f4f6',
+                border: '1px solid #e5e7eb',
+                color: '#6b7280',
+                cursor: 'pointer',
+                padding: '6px 10px',
+                borderRadius: 6,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginLeft: 4,
+              }}
+            >
+              <X size={16} />
+            </button>
+          </div>
         </div>
 
         {/* Video Player */}
-        <div style={{ position: 'relative', width: '100%', backgroundColor: '#f4f5f7', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', backgroundColor: '#0d1117', overflow: 'hidden' }}>
           <Player
             ref={playerRef}
             component={MainVideo}
@@ -110,6 +142,10 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
             controls
             autoPlay={false}
             loop={false}
+            inputProps={{
+              enableVoiceover,
+              volume: 1.0,
+            }}
             style={{ width: '100%', aspectRatio: '16/9' }}
           />
         </div>
@@ -166,9 +202,15 @@ export const RemotionVideoModal = ({ isOpen, onClose }) => {
             color: '#9ca3af',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <Terminal size={14} color="#6b7280" />
-            <span>Render: <code style={{ color: '#374151', backgroundColor: '#f3f4f6', padding: '2px 6px', borderRadius: 4, border: '1px solid #e5e7eb', fontFamily: '"IBM Plex Mono", monospace' }}>npm run remotion:render</code></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Terminal size={14} color="#6b7280" />
+              <span>Voiceover: <code style={{ color: '#374151', backgroundColor: '#f3f4f6', padding: '2px 6px', borderRadius: 4, border: '1px solid #e5e7eb', fontFamily: '"IBM Plex Mono", monospace' }}>npm run voiceover:generate</code></span>
+            </div>
+            <span>|</span>
+            <div>
+              <span>Render: <code style={{ color: '#374151', backgroundColor: '#f3f4f6', padding: '2px 6px', borderRadius: 4, border: '1px solid #e5e7eb', fontFamily: '"IBM Plex Mono", monospace' }}>npm run remotion:render</code></span>
+            </div>
           </div>
           <span style={{ fontSize: 11 }}>Remotion v4 · 5400 frames</span>
         </div>
