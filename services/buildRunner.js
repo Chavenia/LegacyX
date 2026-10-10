@@ -72,8 +72,15 @@ class BuildRunner {
           });
         }
 
-        // If 'mvn' not recognized on machine, run deterministic syntax & javac compiler validation
-        if (combinedOutput.includes('not recognized') || error?.code === 'ENOENT' || !combinedOutput) {
+        // If 'mvn' / 'mvnw' not available (any platform), run deterministic syntax & javac compiler validation
+        const mvnMissing =
+          error?.code === 'ENOENT' ||                          // command not found (Node-level)
+          !combinedOutput ||                                    // no output at all
+          combinedOutput.includes('not recognized') ||         // Windows: 'mvn' is not recognized
+          combinedOutput.includes('not found') ||              // Linux/macOS: mvn: not found
+          combinedOutput.includes('No such file') ||           // shell: No such file or directory
+          combinedOutput.includes('command not found');        // bash/zsh: command not found
+        if (mvnMissing) {
           const simulatedResult = this.runJavaCompileCheck(sandboxPath, attemptNum);
           return resolve(simulatedResult);
         }

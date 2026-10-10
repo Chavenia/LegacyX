@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const router = express.Router();
 const sandboxManager = require('../services/sandboxManager');
 const gitService = require('../services/gitService');
@@ -12,6 +14,48 @@ const slackGateway = require('../services/slackGateway');
 
 // In-memory cache for active sessions and scans
 const activeSessions = new Map();
+
+/**
+ * Persists session metadata to disk so it survives process restarts on
+ * ephemeral platforms (Render free tier, Railway, etc.).
+ * Only lightweight fields are written — large diff arrays are excluded.
+ */
+function persistSession(sandboxPath, sessionData) {
+  try {
+    const meta = {
+      sandboxId: sessionData.sandboxId,
+      repoUrl: sessionData.repoUrl,
+      clonedAt: sessionData.clonedAt,
+      cloneResult: sessionData.cloneResult,
+      pom: sessionData.pom,
+      ast: sessionData.ast,
+      security: sessionData.security,
+      scorecard: sessionData.scorecard,
+    };
+    fs.writeFileSync(path.join(sandboxPath, '.legacyx-session.json'), JSON.stringify(meta), 'utf8');
+  } catch {
+    // Non-fatal — session just won't survive restarts for this request
+  }
+}
+
+/**
+ * Loads a persisted session from disk if the in-memory map missed it.
+ */
+function loadPersistedSession(sandboxId) {
+  try {
+    const sandboxPath = sandboxManager.getSandboxPath(sandboxId);
+    const metaFile = path.join(sandboxPath, '.legacyx-session.json');
+    if (fs.existsSync(metaFile)) {
+      const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
+      // Restore to in-memory map for subsequent calls in this process lifetime
+      activeSessions.set(sandboxId, { ...meta, diffs: [], buildResult: null });
+      return activeSessions.get(sandboxId);
+    }
+  } catch {
+    // ignore — sandbox may have been cleaned
+  }
+  return null;
+}
 
 /**
  * Health check endpoint
@@ -80,6 +124,7 @@ router.post('/scan', async (req, res) => {
     };
 
     activeSessions.set(sandbox.sandboxId, sessionData);
+    persistSession(sandbox.sandboxPath, sessionData);
 
     return res.json({
       success: true,
@@ -134,7 +179,8 @@ router.post('/refactor', async (req, res) => {
       return res.status(400).json({ error: 'sandboxId is required' });
     }
 
-    const session = activeSessions.get(sandboxId);
+    // Try in-memory first, then fall back to disk-persisted session (survives restarts)
+    let session = activeSessions.get(sandboxId) || loadPersistedSession(sandboxId);
     let sandboxPath;
     try {
       sandboxPath = sandboxManager.getSandboxPath(sandboxId);
@@ -142,7 +188,7 @@ router.post('/refactor', async (req, res) => {
       return res.status(404).json({ error: `Sandbox ${sandboxId} not found` });
     }
 
-    // If session was not loaded, rescan first
+    // If session was not loaded from either source, rescan from the sandbox files
     let pomData = session?.pom;
     let astData = session?.ast;
     if (!pomData || !astData) {
