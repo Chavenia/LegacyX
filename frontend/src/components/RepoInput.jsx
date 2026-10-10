@@ -1,12 +1,27 @@
 import React, { useState } from 'react';
 import { GitBranch, Key, Search, FolderGit2, AlertCircle } from 'lucide-react';
 
+// Hardcoded list of preset GitHub repository URLs
+export const PRESET_GITHUB_REPOS = [
+  'https://github.com/spring-projects/spring-petclinic',
+  'https://github.com/javaee/cargotracker',
+  'https://github.com/apache/struts',
+  'https://github.com/apache/tomcat',
+  'https://github.com/eugenp/tutorials'
+];
+
+// Randomly select exactly one repository URL per execution or run
+export const getRandomPresetRepo = () => {
+  return PRESET_GITHUB_REPOS[Math.floor(Math.random() * PRESET_GITHUB_REPOS.length)];
+};
+
 export default function RepoInput({ onScan, isScanning, scanStep }) {
   const [repoUrl, setRepoUrl] = useState('sample:demo');
   const [branch, setBranch] = useState('');
   const [token, setToken] = useState('');
   const [showTokenField, setShowTokenField] = useState(false);
   const [error, setError] = useState(null);
+  const [randomPresetRepo] = useState(() => getRandomPresetRepo());
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -50,10 +65,11 @@ export default function RepoInput({ onScan, isScanning, scanStep }) {
           </button>
           <button
             type="button"
-            onClick={() => handlePresetSelect('https://github.com/gabrielrovesti/spring-boot-migration-guide')}
+            onClick={() => handlePresetSelect(randomPresetRepo)}
             className="text-xs bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-800 px-2.5 py-1 rounded transition-colors font-mono border border-gray-200 cursor-pointer"
+            title={randomPresetRepo}
           >
-            spring-boot-migration-guide
+            {randomPresetRepo.split('/').pop()}
           </button>
         </div>
       </div>
