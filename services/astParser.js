@@ -121,10 +121,10 @@ class AstParser {
       if (line.includes('org.junit.Test') || line.includes('@Test') && !content.includes('org.junit.jupiter')) {
         junit4Matches.push({ line: lineNum, type: 'Test', raw: line.trim(), replacement: '@org.junit.jupiter.api.Test' });
       }
-      if (line.includes('@Before') && !line.includes('@BeforeEach') && !line.includes('@BeforeAll')) {
+      if (line.includes('@Before') && !line.includes('@BeforeEach') && !line.includes('@BeforeAll') && !line.includes('@BeforeClass')) {
         junit4Matches.push({ line: lineNum, type: 'Before', raw: line.trim(), replacement: '@BeforeEach' });
       }
-      if (line.includes('@After') && !line.includes('@AfterEach') && !line.includes('@AfterAll')) {
+      if (line.includes('@After') && !line.includes('@AfterEach') && !line.includes('@AfterAll') && !line.includes('@AfterClass')) {
         junit4Matches.push({ line: lineNum, type: 'After', raw: line.trim(), replacement: '@AfterEach' });
       }
       if (line.includes('@BeforeClass')) {
