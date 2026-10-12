@@ -27,7 +27,7 @@ export default function SandboxManager({ activeSandboxId, onSelectSandbox, onClo
     setDeleting(id);
     try {
       await (api.deleteSandbox ? api.deleteSandbox(id) : fetch(`http://localhost:5000/api/sandboxes/${id}`, { method: 'DELETE' }));
-      setSandboxes(prev => (prev || []).filter(s => s.sandboxId !== id));
+      setSandboxes(prev => (prev || []).filter(s => s.id !== id));
       toast({ type: 'success', title: 'Sandbox Cleaned', message: `Sandbox ${id.substring(0, 12)}… removed.` });
     } catch {
       toast({ type: 'error', title: 'Delete Failed', message: 'Could not clean sandbox.' });
@@ -85,36 +85,36 @@ export default function SandboxManager({ activeSandboxId, onSelectSandbox, onClo
           )}
 
           {(sandboxes || []).map(sb => {
-            const isActive = sb.sandboxId === activeSandboxId;
+            const isActive = sb.id === activeSandboxId;
             return (
               <div
-                key={sb.sandboxId}
+                key={sb.id}
                 className={`border rounded-lg p-2.5 text-xs font-mono flex flex-col gap-1.5 cursor-pointer transition-colors ${
                   isActive ? 'border-blue-400 bg-blue-50' : 'border-gray-200 bg-gray-50 hover:border-gray-300'
                 }`}
-                onClick={() => onSelectSandbox && onSelectSandbox(sb.sandboxId)}
+                onClick={() => onSelectSandbox && onSelectSandbox(sb.id)}
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className={`font-medium truncate max-w-[16rem] ${isActive ? 'text-blue-600' : 'text-gray-800'}`}>
-                    {sb.sandboxId}
+                    {sb.id}
                   </span>
                   {isActive && (
                     <span className="text-[10px] bg-blue-600 text-white px-1.5 py-0.2 rounded shrink-0">ACTIVE</span>
                   )}
                 </div>
                 <div className="text-gray-400 text-[11px] truncate">
-                  {sb.repoUrl || sb.sandboxPath}
+                  {sb.repoUrl || sb.path}
                 </div>
                 <div className="flex items-center justify-between pt-1">
                   <span className="flex items-center gap-1 text-gray-400 text-[10px]">
                     <Clock className="w-3 h-3" /> {elapsedLabel(sb.createdAt)}
                   </span>
                   <button
-                    onClick={(e) => { e.stopPropagation(); handleDelete(sb.sandboxId); }}
-                    disabled={deleting === sb.sandboxId}
+                    onClick={(e) => { e.stopPropagation(); handleDelete(sb.id); }}
+                    disabled={deleting === sb.id}
                     className="flex items-center gap-1 text-gray-400 hover:text-red-500 transition-colors cursor-pointer disabled:opacity-40 text-[11px]"
                   >
-                    <Trash2 className={`w-3 h-3 ${deleting === sb.sandboxId ? 'animate-spin' : ''}`} />
+                    <Trash2 className={`w-3 h-3 ${deleting === sb.id ? 'animate-spin' : ''}`} />
                     <span>Clean</span>
                   </button>
                 </div>
